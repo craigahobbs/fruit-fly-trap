@@ -1,0 +1,35 @@
+{
+    "type": "module",
+    "name": "fruit-fly-trap",
+    "version": "0.9.0",
+    "description": "fruit-fly-trap",
+    "keywords": "fruit-fly-trap",
+    "homepage": "https://github.com/craigahobbs/fruit-fly-trap#readme",
+    "bugs": "https://github.com/craigahobbs/fruit-fly-trap/issues",
+    "license": "MIT",
+    "author": {
+        "name": "Craig A. Hobbs",
+        "email": "craigahobbs@gmail.com",
+        "url": "https://github.com/craigahobbs"
+    },
+    "files": [
+        "index.js",
+        "src/fruit-fly-trap/**/*"
+    ],
+    "scripts": {
+        "test": "ava -v 'src/tests/**/*.js'"
+    },
+    "dependencies": {
+        "element-model": "~0.9",
+        "markdown-model": "~0.9",
+        "schema-markdown": "~1.0",
+        "schema-markdown-doc": "~0.9"
+    },
+    "devDependencies": {
+        "ava": "4.0.0-alpha.2",
+        "c8": "7.8.0",
+        "eslint": "7.32.0",
+        "jsdoc": "3.6.7",
+        "window": "4.2.7"
+    }
+}
