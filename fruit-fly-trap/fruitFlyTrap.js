@@ -110,7 +110,6 @@ export class FruitFlyTrap {
         }
 
         // Render the application
-        this.window.document.title = 'title' in result ? result.title : 'FruitFlyTrap';
         renderElements(this.window.document.body, result.elements);
     }
 
@@ -149,24 +148,23 @@ export class FruitFlyTrap {
         };
 
         // Fruit fly trap form editor
-        const nbsp = '\xa0';
         return {
             'elements': [
-                {'html': 'h1', 'elem': {'text': 'fruit-fly-trap'}},
-                updown('Glass inside-diameter', 'd', 0.1),
-                updown('Glass height', 'h', 0.1),
-                updown('Glass bottom-offset', 'o', 0.1),
-                updown('Cone bottom diameter', 'b', 0.1),
+                {'html': 'h1', 'elem': {'text': 'Ye Olde Fruit Fly Trap'}},
                 {'html': 'p', 'elem': [
-                    {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}},
-                    {'text': ' '},
                     {
                         'html': 'a',
                         'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
                         'elem': {'text': 'Print'}
-                    }
+                    },
+                    {'text': ' | '},
+                    {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}
                 ]},
-                {'html': 'p', 'elem': {'text': nbsp}},
+                updown('Glass inside-diameter', 'd', 0.1),
+                updown('Glass height', 'h', 0.1),
+                updown('Glass bottom-offset', 'o', 0.1),
+                updown('Cone bottom diameter', 'b', 0.1),
+                {'html': 'p', 'elem': {'text': '\xa0'}},
                 formElements
             ]
         };
@@ -235,7 +233,7 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
             'attr': {
                 'fill': 'none',
                 'stroke': 'black',
-                'stroke-width': `${lineWidthIn}`,
+                'stroke-width': `${lineWidthIn.toFixed(3)}`,
                 // eslint-disable-next-line prefer-template
                 'd': points.map((pt, ix) => `${ix === 0 ? 'M' : 'L'} ${pt[0].toFixed(3)} ${pt[1].toFixed(3)}`).join(' ') + ' Z'
             }
