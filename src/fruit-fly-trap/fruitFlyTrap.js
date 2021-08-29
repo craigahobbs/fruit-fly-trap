@@ -110,7 +110,6 @@ export class FruitFlyTrap {
         }
 
         // Render the application
-        this.window.document.title = 'title' in result ? result.title : 'FruitFlyTrap';
         renderElements(this.window.document.body, result.elements);
     }
 
@@ -151,20 +150,20 @@ export class FruitFlyTrap {
         // Fruit fly trap form editor
         return {
             'elements': [
-                {'html': 'h1', 'elem': {'text': 'fruit-fly-trap'}},
-                updown('Glass inside-diameter', 'd', 0.1),
-                updown('Glass height', 'h', 0.1),
-                updown('Glass bottom-offset', 'o', 0.1),
-                updown('Cone bottom diameter', 'b', 0.1),
+                {'html': 'h1', 'elem': {'text': 'Ye Olde Fruit Fly Trap'}},
                 {'html': 'p', 'elem': [
-                    {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}},
-                    {'text': ' '},
                     {
                         'html': 'a',
                         'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
                         'elem': {'text': 'Print'}
-                    }
+                    },
+                    {'text': ' | '},
+                    {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}
                 ]},
+                updown('Glass inside-diameter', 'd', 0.1),
+                updown('Glass height', 'h', 0.1),
+                updown('Glass bottom-offset', 'o', 0.1),
+                updown('Cone bottom diameter', 'b', 0.1),
                 {'html': 'p', 'elem': {'text': '\xa0'}},
                 formElements
             ]

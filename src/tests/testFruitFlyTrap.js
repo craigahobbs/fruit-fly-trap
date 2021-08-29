@@ -22,7 +22,7 @@ test('FruitFlyTrap.run, help command', (t) => {
     const app = FruitFlyTrap.run(window);
     t.is(app.window, window);
     t.deepEqual(app.params, {'cmd': {'help': 1}});
-    t.is(window.document.title, 'FruitFlyTrap');
+    t.is(window.document.title, '');
     t.true(window.document.body.innerHTML.startsWith(
         '<h1 id="cmd.help=1&amp;type_FruitFlyTrap"><a class="linktarget">FruitFlyTrap</a></h1>'
     ));
@@ -35,8 +35,8 @@ test('FruitFlyTrap.run, main', (t) => {
     const app = FruitFlyTrap.run(window);
     t.is(app.window, window);
     t.deepEqual(app.params, {});
-    t.is(window.document.title, 'FruitFlyTrap');
-    t.true(window.document.body.innerHTML.startsWith('<h1>fruit-fly-trap</h1>'));
+    t.is(window.document.title, '');
+    t.true(window.document.body.innerHTML.startsWith('<h1>Ye Olde Fruit Fly Trap</h1>'));
 });
 
 
@@ -46,7 +46,7 @@ test('FruitFlyTrap.run, hash parameter error', (t) => {
     const app = FruitFlyTrap.run(window);
     t.is(app.window, window);
     t.is(app.params, null);
-    t.is(window.document.title, 'FruitFlyTrap');
+    t.is(window.document.title, '');
     t.is(window.document.body.innerHTML, "<p>Error: Unknown member 'foo'</p>");
 });
 
@@ -59,7 +59,15 @@ test('FruitFlyTrap.main', (t) => {
         app.main(),
         {
             'elements': [
-                {'html': 'h1', 'elem': {'text': 'fruit-fly-trap'}},
+                {'html': 'h1', 'elem': {'text': 'Ye Olde Fruit Fly Trap'}},
+                {
+                    'html': 'p',
+                    'elem': [
+                        {'html': 'a', 'attr': {'href': '#cmd.print=1'}, 'elem': {'text': 'Print'}},
+                        {'text': ' | '},
+                        {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}
+                    ]
+                },
                 {
                     'html': 'p',
                     'elem': [
@@ -98,14 +106,6 @@ test('FruitFlyTrap.main', (t) => {
                         {'text': ' '},
                         {'html': 'a', 'attr': {'href': '#b=0.60'}, 'elem': {'text': 'More'}},
                         {'text': '): 0.50 in'}
-                    ]
-                },
-                {
-                    'html': 'p',
-                    'elem': [
-                        {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}},
-                        {'text': ' '},
-                        {'html': 'a', 'attr': {'href': '#cmd.print=1'}, 'elem': {'text': 'Print'}}
                     ]
                 },
                 {'html': 'p', 'elem': {'text': '\xa0'}},
