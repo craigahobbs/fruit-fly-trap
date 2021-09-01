@@ -159,7 +159,7 @@ export class FruitFlyTrap {
                             `\
 ## Instructions
 
-TODO
+Coming soon!
 
 ## Measurements
 `
