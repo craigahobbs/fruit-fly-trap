@@ -2,6 +2,7 @@
 // https://github.com/craigahobbs/fruit-fly-trap/blob/main/LICENSE
 
 import * as smd from 'schema-markdown/index.js';
+import {markdownElements, parseMarkdown} from 'markdown-model/index.js';
 import {UserTypeElements} from 'schema-markdown-doc/index.js';
 import {encodeQueryString} from 'schema-markdown/index.js';
 import {renderElements} from 'element-model/index.js';
@@ -140,7 +141,7 @@ export class FruitFlyTrap {
                 'elem': [
                     {'text': `${label} (`},
                     {'html': 'a', 'attr': {'href': `#${encodeQueryString(lessParams)}`}, 'elem': {'text': 'Less'}},
-                    {'text': ' '},
+                    {'text': ' | '},
                     {'html': 'a', 'attr': {'href': `#${encodeQueryString(moreParams)}`}, 'elem': {'text': 'More'}},
                     {'text': `): ${this.config[param].toFixed(2)} in`}
                 ]
@@ -150,20 +151,40 @@ export class FruitFlyTrap {
         // Fruit fly trap form editor
         return {
             'elements': [
-                {'html': 'h1', 'elem': {'text': 'Ye Olde Fruit Fly Trap'}},
-                {'html': 'p', 'elem': [
-                    {
-                        'html': 'a',
-                        'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
-                        'elem': {'text': 'Print'}
-                    },
-                    {'text': ' | '},
-                    {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}
+                markdownElements(parseMarkdown(
+                    `\
+# Ye Olde Fruit Fly Trap Maker
+`
+                )),
+                {'html': 'div', 'attr': {'style': 'display: flex; flex-flow: row wrap; align-items: top;'}, 'elem': [
+                    {'html': 'div', 'elem': [
+                        markdownElements(parseMarkdown(
+                            `\
+## Instructions
+
+TODO
+
+## Measurements
+`
+                        )),
+                        {'html': 'p', 'elem': [
+                            {
+                                'html': 'a',
+                                'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
+                                'elem': {'text': 'Print'}
+                            },
+                            {'text': ' | '},
+                            {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}
+                        ]},
+                        updown('Glass inside-diameter', 'd', 0.1),
+                        updown('Glass height', 'h', 0.1),
+                        updown('Glass bottom-offset', 'o', 0.1),
+                        updown('Cone bottom diameter', 'b', 0.1)
+                    ]},
+                    {'html': 'div', 'attr': {'style': 'margin-left: 5em;'}, 'elem': [
+                        {'html': 'p', 'elem': {'html': 'img', 'attr': {'src': 'fruit-fly-trap.svg', 'alt': 'Ye Olde Fruit Fly Trap'}}}
+                    ]}
                 ]},
-                updown('Glass inside-diameter', 'd', 0.1),
-                updown('Glass height', 'h', 0.1),
-                updown('Glass bottom-offset', 'o', 0.1),
-                updown('Cone bottom diameter', 'b', 0.1),
                 {'html': 'p', 'elem': {'text': '\xa0'}},
                 formElements
             ]

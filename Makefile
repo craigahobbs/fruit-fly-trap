@@ -44,7 +44,6 @@ app: build/npm.build
 
     # Copy dependencies
 	cp -R \
-		README.md \
 		static/* \
 		src/fruit-fly-trap \
 		node_modules/element-model/src/element-model \

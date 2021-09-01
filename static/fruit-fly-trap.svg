@@ -1,0 +1,42 @@
+<svg width="300" height="375" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cone -->
+  <path fill="white" stroke="black"
+        d="M 34 75
+           L 175 300
+           A 25 10 0 0 0 225 300
+           L 366 75" />
+  <path fill="none" stroke="black" stroke-dasharray="5 5"
+        d="M 175 300
+           A 25 10 0 0 1 225 300" />
+  <ellipse fill="white" stroke="black" cx="200" cy="75" rx="166" ry="50" />
+
+  <!-- Glass -->
+  <path fill="none" stroke="black"
+        d="M 50 100
+           A 150 50 0 0 0 350 100
+           L 350 400
+           A 150 50 0 0 1 50 400
+           Z" />
+  <path fill="none" stroke="black" stroke-dasharray="5 5"
+        d="M 50 400
+           A 150 50 0 0 1 350 400" />
+
+  <!-- Grape juice -->
+  <path fill="#cc99ff80" stroke="none"
+        d="M 50 365
+           A 150 50 0 0 1 350 365
+           L 350 400
+           A 150 50 0 0 1 50 400
+           Z" />
+  <path fill="transparent" stroke="black" stroke-dasharray="5 5"
+        d="M 50 365
+           A 150 50 0 0 0 350 365" />
+
+  <!-- Glass inside-diameter annotation -->
+
+  <!-- Glass height annotation -->
+
+  <!-- Glass offset annotation -->
+
+  <!-- Glass cone-bottom annotation -->
+</svg>
