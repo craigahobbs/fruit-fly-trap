@@ -164,16 +164,18 @@ Coming soon!
 ## Measurements
 `
                         )),
-                        updown('Glass inside-diameter', 'd', 0.1),
-                        updown('Glass height', 'h', 0.1),
-                        updown('Glass bottom-offset', 'o', 0.1),
-                        updown('Cone bottom diameter', 'b', 0.1),
-                        {'html': 'p', 'elem': {
-                            'html': 'a',
-                            'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
-                            'elem': {'text': 'Print Cone Form'}
-                        }},
-                        {'html': 'p', 'elem': {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}}
+                        {'html': 'div', 'attr': {'style': 'text-align: right;'}, 'elem': [
+                            updown('Glass inside-diameter', 'd', 0.1),
+                            updown('Glass height', 'h', 0.1),
+                            updown('Glass bottom-offset', 'o', 0.1),
+                            updown('Cone bottom diameter', 'b', 0.1),
+                            {'html': 'p', 'elem': {
+                                'html': 'a',
+                                'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
+                                'elem': {'text': 'Print Cone Form'}
+                            }},
+                            {'html': 'p', 'elem': {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}}
+                        ]}
                     ]},
                     {'html': 'div', 'attr': {'style': 'margin-left: 5em;'}, 'elem': [
                         {'html': 'p', 'elem': {'html': 'img', 'attr': {'src': 'fruit-fly-trap.svg', 'alt': 'Ye Olde Fruit Fly Trap'}}}
