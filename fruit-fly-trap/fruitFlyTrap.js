@@ -8,6 +8,13 @@ import {encodeQueryString} from '../schema-markdown/index.js';
 import {renderElements} from '../element-model/index.js';
 
 
+// Defaults
+const defaultTop = 3;
+const defaultBottom = 0.7;
+const defaultHeight = 4.5;
+const defaultOffset = 1;
+
+
 // The application's hash parameter type model
 const appHashTypes = (new smd.SchemaMarkdownParser(`\
 # The FruitFlyTrap application hash parameters struct
@@ -16,16 +23,16 @@ struct FruitFlyTrap
     # Optional command
     optional Command cmd
 
-    # The diameter of the glass, in inches (default is 3 in)
+    # The diameter of the glass, in inches (default is ${defaultTop} in)
     optional float(>= 1, <= 36) d
 
-    # The diameter of the cone's bottom hole, in inches (default is 0.5 in)
+    # The diameter of the cone's bottom hole, in inches (default is ${defaultBottom} in)
     optional float(>= 0.1, <= 36) b
 
-    # The height of the glass, in inches (default is 6 in)
+    # The height of the glass, in inches (default is ${defaultHeight} in)
     optional float(>= 1, <= 36) h
 
-    # The offset from the bottom of the glass, in inches (default is 1 in)
+    # The offset from the bottom of the glass, in inches (default is ${defaultOffset} in)
     optional float(>= 0, <= 6) o
 
 # Application command union
@@ -83,10 +90,10 @@ export class FruitFlyTrap {
 
         // Compute the params with defaults
         this.config = {
-            'd': 3,
-            'h': 4.5,
-            'o': 1,
-            'b': 0.5,
+            'd': defaultTop,
+            'b': defaultBottom,
+            'h': defaultHeight,
+            'o': defaultOffset,
             ...this.params
         };
     }
