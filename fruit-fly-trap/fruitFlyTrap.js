@@ -194,64 +194,93 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     const formRadiusOuter = formRadius + height + extraLength;
     const formTheta = Math.PI * diameterBottom / formRadius;
 
-    // Compute the cone form's points
-    const formPoints = [];
-    const formCenterX = 0;
-    const formCenterY = formRadiusOuter;
-    const formPointCount = 100;
-    const formExtraCount = formPointCount + 10;
-    const thetaDelta = formTheta / formPointCount;
-    let formPathMinX = 0;
-    let formPathMaxX = 0;
-    let formPathMinY = 0;
-    let formPathMaxY = 0;
-    for (const forward of [true, false]) {
-        const radius = forward ? formRadius : formRadiusOuter;
-        for (let thetaIx = 0; thetaIx < formExtraCount; thetaIx += 1) {
-            const theta = thetaDelta * (forward ? thetaIx : formExtraCount - thetaIx - 1);
-            const formPathX = formCenterX + radius * Math.sin(theta);
-            const formPathY = formCenterY - radius * Math.cos(theta);
-            formPoints.push([formPathX, formPathY]);
-            formPathMinX = Math.min(formPathMinX, formPathX);
-            formPathMaxX = Math.max(formPathMaxX, formPathX);
-            formPathMinY = Math.min(formPathMinY, formPathY);
-            formPathMaxY = Math.max(formPathMaxY, formPathY);
-        }
-    }
-
-    // Compute the cone form's extra marker
-    const thetaExtra = formPointCount * thetaDelta;
-    const formExtraPoints = [
-        [formCenterX + formRadius * Math.sin(thetaExtra), formCenterY - formRadius * Math.cos(thetaExtra)],
-        [formCenterX + formRadiusOuter * Math.sin(thetaExtra), formCenterY - formRadiusOuter * Math.cos(thetaExtra)]
-    ];
+    // Compute the flap angle
+    const flapLength = 0.125;
+    const flapTheta = (formTheta + flapLength / formRadius) % (2 * Math.PI);
 
     // Compute the SVG extents
+    let formMinX = 0;
+    let formMaxX = 0;
+    let formMinY = 0;
+    let formMaxY = 0;
+    const flapInnerX = formRadius * Math.sin(flapTheta);
+    const flapInnerY = formRadius * Math.cos(flapTheta);
+    const flapOuterX = formRadiusOuter * Math.sin(flapTheta);
+    const flapOuterY = formRadiusOuter * Math.cos(flapTheta);
+    if (flapTheta > 1.5 * Math.PI) {
+        formMinX = -formRadiusOuter;
+        formMinY = -formRadiusOuter;
+        formMaxX = formRadiusOuter;
+        formMaxY = formRadiusOuter;
+    } else if (flapTheta > Math.PI) {
+        formMinX = flapOuterX;
+        formMinY = -formRadiusOuter;
+        formMaxX = formRadiusOuter;
+        formMaxY = formRadiusOuter;
+    } else if (flapTheta > 0.5 * Math.PI) {
+        formMinX = 0;
+        formMinY = flapOuterY;
+        formMaxX = formRadiusOuter;
+        formMaxY = formRadiusOuter;
+    } else {
+        formMinX = 0;
+        formMinY = flapInnerY;
+        formMaxX = flapOuterX;
+        formMaxY = formRadiusOuter;
+    }
+
+    // Expand the form bounding box by one line width (to accomodate lines)
     const lineWidthIn = 0.5 / 72;
-    formPathMinX -= lineWidthIn;
-    formPathMaxX += lineWidthIn;
-    formPathMinY -= lineWidthIn;
-    formPathMaxY += lineWidthIn;
-    const formWidth = formPathMaxX - formPathMinX;
-    const formHeight = formPathMaxY - formPathMinY;
+    formMinX -= lineWidthIn;
+    formMinY -= lineWidthIn;
+    formMaxX += lineWidthIn;
+    formMaxY += lineWidthIn;
+
+    // Compute the cone form guide line
+    const guideInnerX = formRadius * Math.sin(formTheta);
+    const guideInnerY = formRadius * Math.cos(formTheta);
+    const guideOuterX = formRadiusOuter * Math.sin(formTheta);
+    const guideOuterY = formRadiusOuter * Math.cos(formTheta);
 
     // Generate the cone form's SVG elements
+    const dashLengthIn = 3 / 72;
     return {
         'svg': 'svg',
         'attr': {
-            'width': `${formWidth.toFixed(3)}in`,
-            'height': `${formHeight.toFixed(3)}in`,
-            'viewBox': `${formPathMinX.toFixed(3)} ${formPathMinY.toFixed(3)} ${formWidth.toFixed(3)} ${formHeight.toFixed(3)}`
+            'width': `${(formMaxX - formMinX).toFixed(3)}in`,
+            'height': `${(formMaxY - formMinY).toFixed(3)}in`,
+            'viewBox': (`${formMinX.toFixed(3)} ${formMinY.toFixed(3)} ` +
+                        `${(formMaxX - formMinX).toFixed(3)} ${(formMaxY - formMinY).toFixed(3)}`)
         },
-        'elem': [formPoints, formExtraPoints].map((points) => ({
-            'svg': 'path',
+        'elem': {
+            'svg': 'g',
             'attr': {
+                'transform': `scale(1, -1) translate(0, ${-(formMinY + formMaxY).toFixed(3)})`,
                 'fill': 'none',
                 'stroke': 'black',
-                'stroke-width': `${lineWidthIn.toFixed(3)}`,
-                // eslint-disable-next-line prefer-template
-                'd': points.map((pt, ix) => `${ix === 0 ? 'M' : 'L'} ${pt[0].toFixed(3)} ${pt[1].toFixed(3)}`).join(' ') + ' Z'
-            }
-        }))
+                'stroke-width': `${lineWidthIn.toFixed(3)}`
+            },
+            'elem': [
+                {
+                    'svg': 'path',
+                    'attr': {
+                        'd': (`M 0 ${formRadius.toFixed(3)} ` +
+                              `A ${formRadius.toFixed(3)} ${formRadius.toFixed(3)} 0 ${flapTheta > Math.PI ? 1 : 0} 0 ` +
+                              `${flapInnerX.toFixed(3)} ${flapInnerY.toFixed(3)} ` +
+                              `L ${flapOuterX.toFixed(3)} ${flapOuterY.toFixed(3)} ` +
+                              `A ${formRadiusOuter.toFixed(3)} ${formRadiusOuter.toFixed(3)} 0 ${flapTheta > Math.PI ? 1 : 0} 1 ` +
+                              `0 ${formRadiusOuter.toFixed(3)} ` +
+                              'Z')
+                    }
+                },
+                {
+                    'svg': 'path',
+                    'attr': {
+                        'stroke-dasharray': dashLengthIn.toFixed(3),
+                        'd': `M ${guideInnerX.toFixed(3)} ${guideInnerY.toFixed(3)} L ${guideOuterX.toFixed(3)} ${guideOuterY.toFixed(3)}`
+                    }
+                }
+            ]
+        }
     };
 }
