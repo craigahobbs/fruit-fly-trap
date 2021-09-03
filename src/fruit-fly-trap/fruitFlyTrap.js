@@ -214,25 +214,25 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     const flapInnerY = formRadius * Math.cos(flapTheta);
     const flapOuterX = formRadiusOuter * Math.sin(flapTheta);
     const flapOuterY = formRadiusOuter * Math.cos(flapTheta);
-    if (flapTheta > 1.5 * Math.PI) {
-        formMinX = -formRadiusOuter;
-        formMinY = -formRadiusOuter;
-        formMaxX = formRadiusOuter;
+    if (flapTheta < 0.5 * Math.PI) {
+        formMinX = 0;
+        formMinY = flapInnerY;
+        formMaxX = flapOuterX;
         formMaxY = formRadiusOuter;
-    } else if (flapTheta > Math.PI) {
-        formMinX = flapOuterX;
-        formMinY = -formRadiusOuter;
-        formMaxX = formRadiusOuter;
-        formMaxY = formRadiusOuter;
-    } else if (flapTheta > 0.5 * Math.PI) {
+    } else if (flapTheta < Math.PI) {
         formMinX = 0;
         formMinY = flapOuterY;
         formMaxX = formRadiusOuter;
         formMaxY = formRadiusOuter;
+    } else if (flapTheta < 1.5 * Math.PI) {
+        formMinX = flapOuterX;
+        formMinY = -formRadiusOuter;
+        formMaxX = formRadiusOuter;
+        formMaxY = formRadiusOuter;
     } else {
-        formMinX = 0;
-        formMinY = flapInnerY;
-        formMaxX = flapOuterX;
+        formMinX = -formRadiusOuter;
+        formMinY = -formRadiusOuter;
+        formMaxX = formRadiusOuter;
         formMaxY = formRadiusOuter;
     }
 
@@ -250,41 +250,43 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     const guideOuterY = formRadiusOuter * Math.cos(formTheta);
 
     // Generate the cone form's SVG elements
-    const dashLengthIn = 3 / 72;
+    const precision = 8;
+    const dashLengthIn = 2 / 72;
     return {
         'svg': 'svg',
         'attr': {
-            'width': `${(formMaxX - formMinX).toFixed(3)}in`,
-            'height': `${(formMaxY - formMinY).toFixed(3)}in`,
-            'viewBox': (`${formMinX.toFixed(3)} ${formMinY.toFixed(3)} ` +
-                        `${(formMaxX - formMinX).toFixed(3)} ${(formMaxY - formMinY).toFixed(3)}`)
+            'width': `${(formMaxX - formMinX).toFixed(precision)}in`,
+            'height': `${(formMaxY - formMinY).toFixed(precision)}in`,
+            'viewBox': (`${formMinX.toFixed(precision)} ${formMinY.toFixed(precision)} ` +
+                        `${(formMaxX - formMinX).toFixed(precision)} ${(formMaxY - formMinY).toFixed(precision)}`)
         },
         'elem': {
             'svg': 'g',
             'attr': {
-                'transform': `scale(1, -1) translate(0, ${-(formMinY + formMaxY).toFixed(3)})`,
+                'transform': `scale(1, -1) translate(0, ${-(formMinY + formMaxY).toFixed(precision)})`,
                 'fill': 'none',
                 'stroke': 'black',
-                'stroke-width': `${lineWidthIn.toFixed(3)}`
+                'stroke-width': `${lineWidthIn.toFixed(precision)}`
             },
             'elem': [
                 {
                     'svg': 'path',
                     'attr': {
-                        'd': (`M 0 ${formRadius.toFixed(3)} ` +
-                              `A ${formRadius.toFixed(3)} ${formRadius.toFixed(3)} 0 ${flapTheta > Math.PI ? 1 : 0} 0 ` +
-                              `${flapInnerX.toFixed(3)} ${flapInnerY.toFixed(3)} ` +
-                              `L ${flapOuterX.toFixed(3)} ${flapOuterY.toFixed(3)} ` +
-                              `A ${formRadiusOuter.toFixed(3)} ${formRadiusOuter.toFixed(3)} 0 ${flapTheta > Math.PI ? 1 : 0} 1 ` +
-                              `0 ${formRadiusOuter.toFixed(3)} ` +
+                        'd': (`M 0 ${formRadius.toFixed(precision)} ` +
+                              `A ${formRadius.toFixed(precision)} ${formRadius.toFixed(precision)}` +
+                              ` 0 ${flapTheta > Math.PI ? 1 : 0} 0 ${flapInnerX.toFixed(precision)} ${flapInnerY.toFixed(precision)} ` +
+                              `L ${flapOuterX.toFixed(precision)} ${flapOuterY.toFixed(precision)} ` +
+                              `A ${formRadiusOuter.toFixed(precision)} ${formRadiusOuter.toFixed(precision)}` +
+                              ` 0 ${flapTheta > Math.PI ? 1 : 0} 1 0 ${formRadiusOuter.toFixed(precision)} ` +
                               'Z')
                     }
                 },
                 {
                     'svg': 'path',
                     'attr': {
-                        'stroke-dasharray': dashLengthIn.toFixed(3),
-                        'd': `M ${guideInnerX.toFixed(3)} ${guideInnerY.toFixed(3)} L ${guideOuterX.toFixed(3)} ${guideOuterY.toFixed(3)}`
+                        'stroke-dasharray': dashLengthIn.toFixed(precision),
+                        'd': (`M ${guideInnerX.toFixed(precision)} ${guideInnerY.toFixed(precision)} ` +
+                              `L ${guideOuterX.toFixed(precision)} ${guideOuterY.toFixed(precision)}`)
                     }
                 }
             ]
