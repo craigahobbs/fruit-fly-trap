@@ -87,15 +87,6 @@ export class FruitFlyTrap {
 
         // Validate the params
         this.params = smd.validateType(appHashTypes, 'FruitFlyTrap', params);
-
-        // Compute the params with defaults
-        this.config = {
-            'd': defaultTop,
-            'b': defaultBottom,
-            'h': defaultHeight,
-            'o': defaultOffset,
-            ...this.params
-        };
     }
 
     // Render the application
@@ -130,16 +121,30 @@ export class FruitFlyTrap {
 
         // Print?
         if ('cmd' in this.params && 'print' in this.params.cmd) {
-            return {'elements': coneFormElements(this.config.d, this.config.b, this.config.h - this.config.o, 0.5 * this.config.o)};
+            return {'elements': coneConfigFormElements(getConeConfig(this.params))};
         }
 
         // Input up/down helper component
         const updown = (label, param, delta) => {
             const {attr} = appHashTypes.FruitFlyTrap.struct.members.find((member) => member.name === param);
+
+            // Compute the less link params
             const lessParams = {...this.params};
+            const lessConfig = getConeConfig(this.params);
+            const paramValue = lessConfig[param];
+            lessConfig[param] = Math.max(lessConfig[param] - delta, attr.gte).toPrecision(2);
+            if (coneConfigFormElements(lessConfig) !== null) {
+                lessParams[param] = lessConfig[param];
+            }
+
+            // Compute the more link params
             const moreParams = {...this.params};
-            lessParams[param] = Math.max(this.config[param] - delta, attr.gte).toPrecision(2);
-            moreParams[param] = Math.min(this.config[param] + delta, attr.lte).toPrecision(2);
+            const moreConfig = getConeConfig(this.params);
+            moreConfig[param] = Math.min(moreConfig[param] + delta, attr.lte).toPrecision(2);
+            if (coneConfigFormElements(moreConfig) !== null) {
+                moreParams[param] = moreConfig[param];
+            }
+
             return {
                 'html': 'p',
                 'elem': [
@@ -147,7 +152,7 @@ export class FruitFlyTrap {
                     {'html': 'a', 'attr': {'href': `#${encodeQueryString(lessParams)}`}, 'elem': {'text': 'Less'}},
                     {'text': ' | '},
                     {'html': 'a', 'attr': {'href': `#${encodeQueryString(moreParams)}`}, 'elem': {'text': 'More'}},
-                    {'text': `): ${this.config[param].toFixed(2)} in`}
+                    {'text': `): ${paramValue.toFixed(2)} in`}
                 ]
             };
         };
@@ -194,6 +199,24 @@ Coming soon!
 }
 
 
+// Helper function to get the cone params with defaults
+function getConeConfig(params) {
+    return {
+        'd': defaultTop,
+        'b': defaultBottom,
+        'h': defaultHeight,
+        'o': defaultOffset,
+        ...params
+    };
+}
+
+
+// Helper function to get a fruit fly trap cone form elements
+function coneConfigFormElements(config) {
+    return coneFormElements(config.d, config.b, config.h - config.o, config.o > 0 ? 0.5 : 0);
+}
+
+
 // Cone form SVG component
 function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     // Compute the cone form's radii and theta
@@ -203,7 +226,12 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
 
     // Compute the flap angle
     const flapLength = 0.125;
-    const flapTheta = (formTheta + flapLength / formRadius) % (2 * Math.PI);
+    const flapTheta = formTheta + flapLength / formRadius;
+
+    // Valid cone specification?
+    if (diameterBottom > 0.9 * diameterTop || flapTheta > 2 * Math.PI) {
+        return null;
+    }
 
     // Compute the SVG extents
     let formMinX = 0;
