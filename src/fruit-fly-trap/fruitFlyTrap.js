@@ -148,11 +148,11 @@ export class FruitFlyTrap {
             'elements': markdownElements(parseMarkdown(`\
 # Fruit Fly Trap Maker
 
-The **Fruit Fly Trap Maker** helps you make a fruit fly trap using a drinking glass and your
-computer printer.
+The **Fruit Fly Trap Maker** rids your home of annoying fruit flies using only a drinking glass,
+your computer printer, and a small amount of apple cider vinegar (or similar).
 
 The trap is made by placing a custom-fitted cone (based on your measurements) into a drinking glass
-containing a small amount of apple cider vinegar (or other fruit-fly-attracting liquid), as pictured
+containing a small amount of fruit-fly-attracting liquid (e.g., apple cider vinegar), as pictured
 below. The fruit flies, attracted to the liquid, fly into the trap through the cone where they
 become trapped!
 
@@ -178,7 +178,7 @@ become trapped!
 
 3. Tape the cone together along the cone form's flap line.
 
-4. Pour a small amount of apple cider vinegar (or other fruit-fly-attracting liquid) into the glass.
+4. Pour a small amount of fruit-fly-attracting liquid (e.g., apple cider vinegar) into the glass.
    Be sure the liquid level is at least 1/4" below the cone-bottom offset you measured above.
 
 5. Place the cone form in the glass. It may help to rub some water around the top rim of the glass
