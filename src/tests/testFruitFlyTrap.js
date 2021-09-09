@@ -3,7 +3,7 @@
 
 /* eslint-disable id-length */
 
-import {FruitFlyTrap} from '../fruit-fly-trap/index.js';
+import {FruitFlyTrap, coneFormElements} from '../fruit-fly-trap/index.js';
 import Window from 'window';
 import test from 'ava';
 
@@ -292,4 +292,252 @@ test('FruitFlyTrap.main, offset max', (t) => {
         'bLess': '#b=0.6&h=12&o=6', 'bMore': '#b=0.8&h=12&o=6',
         'print': '#cmd.print=1&h=12&o=6'
     }));
+});
+
+
+test('FruitFlyTrap.main, invalid diameter', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('b=5.4&d=6');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#b=5.4&d=6', 'dMore': '#b=5.4&d=6.1', 'dValue': '6',
+        'hLess': '#b=5.4&d=6&h=4.4', 'hMore': '#b=5.4&d=6&h=4.6',
+        'oLess': '#b=5.4&d=6&o=0.9', 'oMore': '#b=5.4&d=6&o=1.1',
+        'bLess': '#b=5.3&d=6', 'bMore': '#b=5.4&d=6', 'bValue': '5.4',
+        'print': '#b=5.4&cmd.print=1&d=6'
+    }));
+});
+
+
+test('FruitFlyTrap.main, invalid theta', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('d=7.3');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#d=7.2', 'dMore': '#d=7.3', 'dValue': '7.3',
+        'hLess': '#d=7.3', 'hMore': '#d=7.3&h=4.6',
+        'oLess': '#d=7.3&o=0.9', 'oMore': '#d=7.3',
+        'bLess': '#d=7.3', 'bMore': '#b=0.8&d=7.3',
+        'print': '#cmd.print=1&d=7.3'
+    }));
+});
+
+
+test('FruitFlyTrap.main, print', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('cmd.print=1');
+    t.deepEqual(
+        app.main(),
+        {
+            'elements': {
+                'svg': 'svg',
+                'attr': {
+                    'width': '5.07910628in',
+                    'height': '7.98506172in',
+                    'viewBox': '-0.00694444 -2.91289988 5.07910628 7.98506172'
+                },
+                'elem': {
+                    'svg': 'g',
+                    'attr': {
+                        'transform': 'scale(1, -1) translate(0, -2.15926195)',
+                        'fill': 'none',
+                        'stroke': 'black',
+                        'stroke-width': '0.00694444'
+                    },
+                    'elem': [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'stroke-dasharray': '0.034722199999999995',
+                                'd': 'M 0 1.06521739 A 1.06521739 1.06521739 0 0 0 0.87247690 -0.61112368 ' +
+                                    'L 4.14871669 -2.90595544 A 5.06521739 5.06521739 0 0 1 0 5.06521739 Z'
+                            }
+                        },
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'stroke': 'lightgray',
+                                'd': 'M 0.93802568 -0.50477314 L 4.46040780 -2.40024779'
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    );
+});
+
+
+test('FruitFlyTrap.main, print non-default', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('cmd.print=1&d=4&h=6&o=1.5&b=1');
+    t.deepEqual(
+        app.main(),
+        {
+            'elements': {
+                'svg': 'svg',
+                'attr': {
+                    'width': '6.51388889in',
+                    'height': '10.22116504in',
+                    'viewBox': '-0.00694444 -3.71422060 6.51388889 10.22116504'
+                },
+                'elem': {
+                    'svg': 'g',
+                    'attr': {
+                        'transform': 'scale(1, -1) translate(0, -2.79272385)',
+                        'fill': 'none',
+                        'stroke': 'black',
+                        'stroke-width': '0.00694444'
+                    },
+                    'elem': [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'stroke-dasharray': '0.034722199999999995',
+                                'd': 'M 0 1.50000000 A 1.50000000 1.50000000 0 0 0 1.23210248 -0.85552527 ' +
+                                    'L 5.33911074 -3.70727615 A 6.50000000 6.50000000 0 0 1 0 6.50000000 Z'
+                            }
+                        },
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'stroke': 'lightgray',
+                                'd': 'M 1.29903811 -0.75000000 L 5.62916512 -3.25000000'
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    );
+});
+
+
+test('FruitFlyTrap.main, print zero-offset', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('cmd.print=1&d=4&h=6&o=0&b=1');
+    t.deepEqual(
+        app.main(),
+        {
+            'elements': {
+                'svg': 'svg',
+                'attr': {
+                    'width': '8.01388889in',
+                    'height': '8.51356343in',
+                    'viewBox': '-0.00694444 -0.50661899 8.01388889 8.51356343'
+                },
+                'elem': {
+                    'svg': 'g',
+                    'attr': {
+                        'transform': 'scale(1, -1) translate(0, -7.50032546)',
+                        'fill': 'none',
+                        'stroke': 'black',
+                        'stroke-width': '0.00694444'
+                    },
+                    'elem': [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'stroke-dasharray': '0.034722199999999995',
+                                'd': 'M 0 2.00000000 A 2.00000000 2.00000000 0 0 0 1.99609502 -0.12491864 ' +
+                                    'L 7.98438009 -0.49967454 A 8.00000000 8.00000000 0 0 1 0 8.00000000 Z'
+                            }
+                        },
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'stroke': 'lightgray',
+                                'd': 'M 2.00000000 0.00000000 L 8.00000000 0.00000000'
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    );
+});
+
+
+test('coneFormElements', (t) => {
+    t.deepEqual(
+        coneFormElements(3, 0.7, 4.5),
+        {
+            'svg': 'svg',
+            'attr': {
+                'width': '5.88345411in',
+                'height': '6.62209131in',
+                'viewBox': '-0.00694444 -0.74558165 5.88345411 6.62209131'
+            },
+            'elem': {
+                'svg': 'g',
+                'attr': {
+                    'transform': 'scale(1, -1) translate(0, -5.13092801)',
+                    'fill': 'none',
+                    'stroke': 'black',
+                    'stroke-width': '0.00694444'
+                },
+                'elem': [
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'stroke-dasharray': '0.034722199999999995',
+                            'd': 'M 0 1.36956522 A 1.36956522 1.36956522 0 0 0 1.35867760 -0.17234868 ' +
+                                'L 5.82290399 -0.73863721 A 5.86956522 5.86956522 0 0 1 0 5.86956522 Z'
+                        }
+                    },
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'stroke': 'lightgray',
+                            'd': 'M 1.36873092 -0.04779714 L 5.86598964 -0.20484487'
+                        }
+                    }
+                ]
+            }
+        }
+    );
+});
+
+
+test('coneFormElements, extra length', (t) => {
+    t.deepEqual(
+        coneFormElements(3, 0.7, 4.5, 0.5),
+        {
+            'svg': 'svg',
+            'attr': {
+                'width': '6.38345411in',
+                'height': '7.18501226in',
+                'viewBox': '-0.00694444 -0.80850260 6.38345411 7.18501226'
+            },
+            'elem': {
+                'svg': 'g',
+                'attr': {
+                    'transform': 'scale(1, -1) translate(0, -5.56800706)',
+                    'fill': 'none',
+                    'stroke': 'black',
+                    'stroke-width': '0.00694444'
+                },
+                'elem': [
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'stroke-dasharray': '0.034722199999999995',
+                            'd': 'M 0 1.36956522 A 1.36956522 1.36956522 0 0 0 1.35867760 -0.17234868 ' +
+                                'L 6.31892915 -0.80155815 A 6.36956522 6.36956522 0 0 1 0 6.36956522 Z'
+                        }
+                    },
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'stroke': 'lightgray',
+                            'd': 'M 1.36873092 -0.04779714 L 6.36568505 -0.22229462'
+                        }
+                    }
+                ]
+            }
+        }
+    );
 });
