@@ -148,27 +148,43 @@ export class FruitFlyTrap {
             'elements': markdownElements(parseMarkdown(`\
 # Fruit Fly Trap Maker
 
-Coming soon!
+The **Fruit Fly Trap Maker** helps you make a fruit fly trap using a drinking glass and your
+computer printer.
 
-At any time you can [reset the cone measurements](#).
-
-## Instructions
-
-Coming soon!
+The trap is made by placing a custom-fitted cone (based on your measurements) into a drinking glass
+containing a small amount of apple cider vinegar (or other fruit-fly-attracting liquid), as pictured
+below. The fruit flies, attracted to the liquid, fly into the trap through the cone where they
+become trapped!
 
 ![Fruit Fly Trap Diagram](fruit-fly-trap.svg)
 
-### Measurements
+## Instructions
 
-Glass inside-diameter ([Less](${updownLink('d', 0.1, false)}) | [More](${updownLink('d', 0.1, true)})): ${paramsDefault.d}
+1. Measure the drinking glass's top-inside diameter, height, and cone-bottom offset. Use the "Less"
+   and "More" links below to enter the measurements.
 
-Glass height ([Less](${updownLink('h', 0.1, false)}) | [More](${updownLink('h', 0.1, true)})): ${paramsDefault.h}
+   **Glass inside-diameter (d)** ([Less](${updownLink('d', 0.1, false)}) | [More](${updownLink('d', 0.1, true)})): ${paramsDefault.d}
 
-Glass bottom-offset ([Less](${updownLink('o', 0.1, false)}) | [More](${updownLink('o', 0.1, true)})): ${paramsDefault.o}
+   **Glass height (h)** ([Less](${updownLink('h', 0.1, false)}) | [More](${updownLink('h', 0.1, true)})): ${paramsDefault.h}
 
-Cone bottom diameter ([Less](${updownLink('b', 0.1, false)}) | [More](${updownLink('b', 0.1, true)})): ${paramsDefault.b}
+   **Cone bottom-offset (o)** ([Less](${updownLink('o', 0.1, false)}) | [More](${updownLink('o', 0.1, true)})): ${paramsDefault.o}
 
-**[Print Cone Form](#${encodeQueryString({...this.params, 'cmd': {'print': 1}})})**
+   **Cone bottom diameter (b)** ([Less](${updownLink('b', 0.1, false)}) | [More](${updownLink('b', 0.1, true)})): ${paramsDefault.b}
+
+   At any time, you can [reset the cone measurements](#).
+
+2. [Print the cone form](#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}). Using
+   scissors, cut along the dotted line to cut out the cone form.
+
+3. Tape the cone together along the cone form's flap line.
+
+4. Pour a small amount of apple cider vinegar (or other fruit-fly-attracting liquid) into the glass.
+   Be sure the liquid level is at least 1/4" below the cone-bottom offset you measured above.
+
+5. Place the cone form in the glass. It may help to rub some water around the top rim of the glass
+   to form a seal.
+
+6. Set the trap near where you have fruit flies.
 `))
         };
     }
