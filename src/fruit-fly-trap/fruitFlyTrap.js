@@ -128,14 +128,16 @@ export class FruitFlyTrap {
         }
 
         // Helper function for up/down links
-        const updownLink = (param, delta, up) => {
+        const updownLink = (param, up) => {
             const linkParams = {...this.params};
             const testParams = {...paramsDefault};
             const {attr} = appHashTypes.FruitFlyTrap.struct.members.find((member) => member.name === param);
+            const delta = 0.1;
+            const roundFactor = 10;
             if (up) {
-                testParams[param] = Math.min(testParams[param] + delta, attr.lte).toPrecision(2);
+                testParams[param] = Math.round(roundFactor * Math.min(testParams[param] + delta, attr.lte)) / roundFactor;
             } else {
-                testParams[param] = Math.max(testParams[param] - delta, attr.gte).toPrecision(2);
+                testParams[param] = Math.round(roundFactor * Math.max(testParams[param] - delta, attr.gte)) / roundFactor;
             }
             if (FruitFlyTrap.trapFormElements(testParams) !== null) {
                 linkParams[param] = testParams[param];
@@ -163,13 +165,13 @@ become trapped!
 1. Measure the drinking glass's top-inside diameter, height, and cone-bottom offset. Use the "Less"
    and "More" links below to enter the measurements.
 
-   **Glass inside-diameter (d)** ([Less](${updownLink('d', 0.1, false)}) | [More](${updownLink('d', 0.1, true)})): ${paramsDefault.d}
+   **Glass inside-diameter (d)** ([Less](${updownLink('d', false)}) | [More](${updownLink('d', true)})): ${paramsDefault.d}
 
-   **Glass height (h)** ([Less](${updownLink('h', 0.1, false)}) | [More](${updownLink('h', 0.1, true)})): ${paramsDefault.h}
+   **Glass height (h)** ([Less](${updownLink('h', false)}) | [More](${updownLink('h', true)})): ${paramsDefault.h}
 
-   **Cone bottom-offset (o)** ([Less](${updownLink('o', 0.1, false)}) | [More](${updownLink('o', 0.1, true)})): ${paramsDefault.o}
+   **Cone bottom-offset (o)** ([Less](${updownLink('o', false)}) | [More](${updownLink('o', true)})): ${paramsDefault.o}
 
-   **Cone bottom diameter (b)** ([Less](${updownLink('b', 0.1, false)}) | [More](${updownLink('b', 0.1, true)})): ${paramsDefault.b}
+   **Cone bottom diameter (b)** ([Less](${updownLink('b', false)}) | [More](${updownLink('b', true)})): ${paramsDefault.b}
 
    At any time, you can [reset the cone measurements](#).
 
