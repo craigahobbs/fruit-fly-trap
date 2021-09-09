@@ -183,7 +183,7 @@ test('FruitFlyTrap.main, complete params', (t) => {
 });
 
 
-test('FruitFlyTrap.main, min diameter', (t) => {
+test('FruitFlyTrap.main, diameter min', (t) => {
     const window = new Window();
     const app = new FruitFlyTrap(window);
     app.updateParams('d=1');
@@ -193,5 +193,103 @@ test('FruitFlyTrap.main, min diameter', (t) => {
         'oLess': '#d=1&o=0.9', 'oMore': '#d=1&o=1.1',
         'bLess': '#b=0.6&d=1', 'bMore': '#b=0.8&d=1',
         'print': '#cmd.print=1&d=1'
+    }));
+});
+
+
+test('FruitFlyTrap.main, diameter max', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('d=36&h=18&b=18');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#b=18&d=35.9&h=18', 'dMore': '#b=18&d=36&h=18', 'dValue': '36',
+        'hLess': '#b=18&d=36&h=17.9', 'hMore': '#b=18&d=36&h=18.1', 'hValue': '18',
+        'oLess': '#b=18&d=36&h=18&o=0.9', 'oMore': '#b=18&d=36&h=18&o=1.1',
+        'bLess': '#b=17.9&d=36&h=18', 'bMore': '#b=18.1&d=36&h=18', 'bValue': '18',
+        'print': '#b=18&cmd.print=1&d=36&h=18'
+    }));
+});
+
+
+test('FruitFlyTrap.main, bottom min', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('b=0.1');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#b=0.1&d=2.9', 'dMore': '#b=0.1&d=3.1',
+        'hLess': '#b=0.1&h=4.4', 'hMore': '#b=0.1&h=4.6',
+        'oLess': '#b=0.1&o=0.9', 'oMore': '#b=0.1&o=1.1',
+        'bLess': '#b=0.1', 'bMore': '#b=0.2', 'bValue': '0.1',
+        'print': '#b=0.1&cmd.print=1'
+    }));
+});
+
+
+test('FruitFlyTrap.main, bottom max', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('b=32&d=35.8&h=18');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#b=32&d=35.7&h=18', 'dMore': '#b=32&d=35.9&h=18', 'dValue': '35.8',
+        'hLess': '#b=32&d=35.8&h=17.9', 'hMore': '#b=32&d=35.8&h=18.1', 'hValue': '18',
+        'oLess': '#b=32&d=35.8&h=18&o=0.9', 'oMore': '#b=32&d=35.8&h=18&o=1.1',
+        'bLess': '#b=31.9&d=35.8&h=18', 'bMore': '#b=32&d=35.8&h=18', 'bValue': '32',
+        'print': '#b=32&cmd.print=1&d=35.8&h=18'
+    }));
+});
+
+
+test('FruitFlyTrap.main, height min', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('d=2&h=1&o=0.2');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#d=1.9&h=1&o=0.2', 'dMore': '#d=2.1&h=1&o=0.2', 'dValue': '2',
+        'hLess': '#d=2&h=1&o=0.2', 'hMore': '#d=2&h=1.1&o=0.2', 'hValue': '1',
+        'oLess': '#d=2&h=1&o=0.1', 'oMore': '#d=2&h=1&o=0.3', 'oValue': '0.2',
+        'bLess': '#b=0.6&d=2&h=1&o=0.2', 'bMore': '#b=0.8&d=2&h=1&o=0.2',
+        'print': '#cmd.print=1&d=2&h=1&o=0.2'
+    }));
+});
+
+
+test('FruitFlyTrap.main, height max', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('h=24');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#d=2.9&h=24', 'dMore': '#d=3.1&h=24',
+        'hLess': '#h=23.9', 'hMore': '#h=24', 'hValue': '24',
+        'oLess': '#h=24&o=0.9', 'oMore': '#h=24&o=1.1',
+        'bLess': '#b=0.6&h=24', 'bMore': '#b=0.8&h=24',
+        'print': '#cmd.print=1&h=24'
+    }));
+});
+
+
+test('FruitFlyTrap.main, offset min', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('o=0');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#d=2.9&o=0', 'dMore': '#d=3.1&o=0',
+        'hLess': '#h=4.4&o=0', 'hMore': '#h=4.6&o=0',
+        'oLess': '#o=0', 'oMore': '#o=0.1', 'oValue': '0',
+        'bLess': '#b=0.6&o=0', 'bMore': '#b=0.8&o=0',
+        'print': '#cmd.print=1&o=0'
+    }));
+});
+
+
+test('FruitFlyTrap.main, offset max', (t) => {
+    const window = new Window();
+    const app = new FruitFlyTrap(window);
+    app.updateParams('h=12&o=6');
+    t.deepEqual(app.main(), getMainElements({
+        'dLess': '#d=2.9&h=12&o=6', 'dMore': '#d=3.1&h=12&o=6',
+        'hLess': '#h=11.9&o=6', 'hMore': '#h=12.1&o=6', 'hValue': '12',
+        'oLess': '#h=12&o=5.9', 'oMore': '#h=12&o=6', 'oValue': '6',
+        'bLess': '#b=0.6&h=12&o=6', 'bMore': '#b=0.8&h=12&o=6',
+        'print': '#cmd.print=1&h=12&o=6'
     }));
 });

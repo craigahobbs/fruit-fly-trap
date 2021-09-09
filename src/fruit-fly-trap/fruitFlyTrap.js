@@ -29,10 +29,10 @@ struct FruitFlyTrap
     optional float(>= 1, <= 36) d
 
     # The diameter of the cone's bottom hole, in inches (default is ${defaultParamValues.b} in)
-    optional float(>= 0.1, <= 36) b
+    optional float(>= 0.1, <= 32) b
 
     # The height of the glass, in inches (default is ${defaultParamValues.h} in)
-    optional float(>= 1, <= 36) h
+    optional float(>= 1, <= 24) h
 
     # The offset from the bottom of the glass, in inches (default is ${defaultParamValues.o} in)
     optional float(>= 0, <= 6) o
