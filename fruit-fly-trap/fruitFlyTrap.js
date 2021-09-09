@@ -8,11 +8,13 @@ import {encodeQueryString} from '../schema-markdown/index.js';
 import {renderElements} from '../element-model/index.js';
 
 
-// Defaults
-const defaultTop = 3;
-const defaultBottom = 0.7;
-const defaultHeight = 4.5;
-const defaultOffset = 1;
+// Default parameter values
+const defaultParamValues = {
+    'd': 3,
+    'b': 0.7,
+    'h': 4.5,
+    'o': 1
+};
 
 
 // The application's hash parameter type model
@@ -23,16 +25,16 @@ struct FruitFlyTrap
     # Optional command
     optional Command cmd
 
-    # The diameter of the glass, in inches (default is ${defaultTop} in)
+    # The diameter of the glass, in inches (default is ${defaultParamValues.d} in)
     optional float(>= 1, <= 36) d
 
-    # The diameter of the cone's bottom hole, in inches (default is ${defaultBottom} in)
+    # The diameter of the cone's bottom hole, in inches (default is ${defaultParamValues.b} in)
     optional float(>= 0.1, <= 36) b
 
-    # The height of the glass, in inches (default is ${defaultHeight} in)
+    # The height of the glass, in inches (default is ${defaultParamValues.h} in)
     optional float(>= 1, <= 36) h
 
-    # The offset from the bottom of the glass, in inches (default is ${defaultOffset} in)
+    # The offset from the bottom of the glass, in inches (default is ${defaultParamValues.o} in)
     optional float(>= 0, <= 6) o
 
 # Application command union
@@ -120,105 +122,66 @@ export class FruitFlyTrap {
         }
 
         // Print?
+        const paramsDefault = {...defaultParamValues, ...this.params};
         if ('cmd' in this.params && 'print' in this.params.cmd) {
-            return {'elements': coneConfigFormElements(getConeConfig(this.params))};
+            return {'elements': FruitFlyTrap.trapFormElements(paramsDefault)};
         }
 
-        // Input up/down helper component
-        const updown = (label, param, delta) => {
+        // Helper function for up/down links
+        const updownLink = (param, delta, up) => {
+            const linkParams = {...this.params};
+            const testParams = {...paramsDefault};
             const {attr} = appHashTypes.FruitFlyTrap.struct.members.find((member) => member.name === param);
-
-            // Compute the less link params
-            const lessParams = {...this.params};
-            const lessConfig = getConeConfig(this.params);
-            const paramValue = lessConfig[param];
-            lessConfig[param] = Math.max(lessConfig[param] - delta, attr.gte).toPrecision(2);
-            if (coneConfigFormElements(lessConfig) !== null) {
-                lessParams[param] = lessConfig[param];
+            if (up) {
+                testParams[param] = Math.min(testParams[param] + delta, attr.lte).toPrecision(2);
+            } else {
+                testParams[param] = Math.max(testParams[param] - delta, attr.gte).toPrecision(2);
             }
-
-            // Compute the more link params
-            const moreParams = {...this.params};
-            const moreConfig = getConeConfig(this.params);
-            moreConfig[param] = Math.min(moreConfig[param] + delta, attr.lte).toPrecision(2);
-            if (coneConfigFormElements(moreConfig) !== null) {
-                moreParams[param] = moreConfig[param];
+            if (FruitFlyTrap.trapFormElements(testParams) !== null) {
+                linkParams[param] = testParams[param];
             }
-
-            return {
-                'html': 'p',
-                'elem': [
-                    {'text': `${label} (`},
-                    {'html': 'a', 'attr': {'href': `#${encodeQueryString(lessParams)}`}, 'elem': {'text': 'Less'}},
-                    {'text': ' | '},
-                    {'html': 'a', 'attr': {'href': `#${encodeQueryString(moreParams)}`}, 'elem': {'text': 'More'}},
-                    {'text': `): ${paramValue.toFixed(2)} in`}
-                ]
-            };
+            return `#${encodeQueryString(linkParams)}`;
         };
 
         // Fruit fly trap form editor
         return {
-            'elements': [
-                markdownElements(parseMarkdown(
-                    `\
-# Ye Olde Fruit Fly Trap Maker
-`
-                )),
-                {'html': 'div', 'attr': {'style': 'display: flex; flex-flow: row wrap; align-items: top;'}, 'elem': [
-                    {'html': 'div', 'elem': [
-                        markdownElements(parseMarkdown(
-                            `\
+            'elements': markdownElements(parseMarkdown(`\
+# Fruit Fly Trap Maker
+
+Coming soon!
+
+At any time you can [reset the cone measurements](#).
+
 ## Instructions
 
 Coming soon!
 
-## Measurements
-`
-                        )),
-                        {'html': 'div', 'attr': {'style': 'text-align: right;'}, 'elem': [
-                            updown('Glass inside-diameter', 'd', 0.1),
-                            updown('Glass height', 'h', 0.1),
-                            updown('Glass bottom-offset', 'o', 0.1),
-                            updown('Cone bottom diameter', 'b', 0.1),
-                            {'html': 'p', 'elem': {
-                                'html': 'a',
-                                'attr': {'href': `#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}`},
-                                'elem': {'text': 'Print Cone Form'}
-                            }},
-                            {'html': 'p', 'elem': {'html': 'a', 'attr': {'href': '#'}, 'elem': {'text': 'Reset'}}}
-                        ]}
-                    ]},
-                    {'html': 'div', 'attr': {'style': 'margin-left: 5em;'}, 'elem': [
-                        {'html': 'p', 'elem': {'html': 'img', 'attr': {'src': 'fruit-fly-trap.svg', 'alt': 'Ye Olde Fruit Fly Trap'}}}
-                    ]}
-                ]}
-            ]
+![Fruit Fly Trap Diagram](fruit-fly-trap.svg)
+
+### Measurements
+
+Glass inside-diameter ([Less](${updownLink('d', 0.1, false)}) | [More](${updownLink('d', 0.1, true)})): ${paramsDefault.d}
+
+Glass height ([Less](${updownLink('h', 0.1, false)}) | [More](${updownLink('h', 0.1, true)})): ${paramsDefault.h}
+
+Glass bottom-offset ([Less](${updownLink('o', 0.1, false)}) | [More](${updownLink('o', 0.1, true)})): ${paramsDefault.o}
+
+Cone bottom diameter ([Less](${updownLink('b', 0.1, false)}) | [More](${updownLink('b', 0.1, true)})): ${paramsDefault.b}
+
+**[Print Cone Form](#${encodeQueryString({...this.params, 'cmd': {'print': 1}})})**
+`))
         };
+    }
+
+    // Helper function to get a fruit fly trap cone form elements
+    static trapFormElements(params) {
+        return coneFormElements(params.d, params.b, params.h - params.o, params.o > 0 ? 0.5 : 0);
     }
 }
 
 
-// Helper function to get the cone params with defaults
-function getConeConfig(params) {
-    return {
-        'd': defaultTop,
-        'b': defaultBottom,
-        'h': defaultHeight,
-        'o': defaultOffset,
-        ...params
-    };
-}
-
-
-// Helper function to get a fruit fly trap cone form elements
-function coneConfigFormElements(config) {
-    return coneFormElements(config.d, config.b, config.h - config.o, config.o > 0 ? 0.5 : 0);
-}
-
-
-// Cone form SVG component
-function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
+// Cone form SVG element-model component
+export function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     // Compute the cone form's radii and theta
     const formRadius = height * diameterBottom / (diameterTop - diameterBottom);
     const formRadiusOuter = formRadius + height + extraLength;
@@ -228,7 +191,7 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     const flapLength = 0.125;
     const flapTheta = formTheta + flapLength / formRadius;
 
-    // Valid cone specification?
+    // Invalid cone specification?
     if (diameterBottom > 0.9 * diameterTop || flapTheta > 2 * Math.PI) {
         return null;
     }
@@ -277,9 +240,8 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
     const guideOuterX = formRadiusOuter * Math.sin(formTheta);
     const guideOuterY = formRadiusOuter * Math.cos(formTheta);
 
-    // Generate the cone form's SVG elements
+    // Return the cone form's SVG element model
     const precision = 8;
-    const dashLengthIn = 2 / 72;
     return {
         'svg': 'svg',
         'attr': {
@@ -300,6 +262,7 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
                 {
                     'svg': 'path',
                     'attr': {
+                        'stroke-dasharray': `${5 * lineWidthIn.toFixed(precision)}`,
                         'd': (`M 0 ${formRadius.toFixed(precision)} ` +
                               `A ${formRadius.toFixed(precision)} ${formRadius.toFixed(precision)}` +
                               ` 0 ${flapTheta > Math.PI ? 1 : 0} 0 ${flapInnerX.toFixed(precision)} ${flapInnerY.toFixed(precision)} ` +
@@ -312,7 +275,7 @@ function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
                 {
                     'svg': 'path',
                     'attr': {
-                        'stroke-dasharray': dashLengthIn.toFixed(precision),
+                        'stroke': 'lightgray',
                         'd': (`M ${guideInnerX.toFixed(precision)} ${guideInnerY.toFixed(precision)} ` +
                               `L ${guideOuterX.toFixed(precision)} ${guideOuterY.toFixed(precision)}`)
                     }
