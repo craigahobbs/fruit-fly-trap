@@ -52,6 +52,7 @@ app: build/npm.build
 		node_modules/schema-markdown/src/schema-markdown \
 		node_modules/schema-markdown-doc/src/schema-markdown-doc \
 		node_modules/schema-markdown-doc/static/schema-markdown-doc.css \
+		build/doc \
 		build/app/
 
     # Fix imports

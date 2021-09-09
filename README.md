@@ -5,6 +5,8 @@
 
 [fruit-fly-trap Application](https://craigahobbs.github.io/fruit-fly-trap/)
 
+[fruit-fly-trap API Documentation](https://craigahobbs.github.io/fruit-fly-trap/doc/)
+
 Coming soon!
 
 

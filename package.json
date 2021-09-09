@@ -2,8 +2,13 @@
     "type": "module",
     "name": "fruit-fly-trap",
     "version": "0.9.0",
-    "description": "fruit-fly-trap",
-    "keywords": "fruit-fly-trap",
+    "description": "The Fruit Fly Trap Maker",
+    "keywords": [
+        "fruit",
+        "fly",
+        "trap",
+        "maker"
+    ],
     "homepage": "https://github.com/craigahobbs/fruit-fly-trap#readme",
     "bugs": "https://github.com/craigahobbs/fruit-fly-trap/issues",
     "license": "MIT",

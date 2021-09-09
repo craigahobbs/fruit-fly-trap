@@ -146,9 +146,9 @@ export class FruitFlyTrap {
         // Fruit fly trap form editor
         return {
             'elements': markdownElements(parseMarkdown(`\
-# Fruit Fly Trap Maker
+# The Fruit Fly Trap Maker
 
-The **Fruit Fly Trap Maker** rids your home of annoying fruit flies using only a drinking glass,
+**The Fruit Fly Trap Maker** rids your home of annoying fruit flies using only a drinking glass,
 your computer printer, and a small amount of apple cider vinegar (or similar).
 
 The trap is made by placing a custom-fitted cone (based on your measurements) into a drinking glass
@@ -196,8 +196,16 @@ become trapped!
 }
 
 
-// Cone form SVG element-model component
-export function coneFormElements(diameterTop, diameterBottom, height, extraLength) {
+/**
+ * Cone form SVG element-model component function
+ *
+ * @property {number} diameterTop - The cone's top diameter
+ * @property {number} diameterBottom - The cone's bottom diameter
+ * @property {number} height - The cone's height
+ * @property {number} [extraLength=0] - Extra length to add to the cone's side
+ * @returns {Object} The cone form's element model
+ */
+export function coneFormElements(diameterTop, diameterBottom, height, extraLength = 0) {
     // Compute the cone form's radii and theta
     const formRadius = height * diameterBottom / (diameterTop - diameterBottom);
     const formRadiusOuter = formRadius + height + extraLength;
