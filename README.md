@@ -3,11 +3,18 @@
 [![npm](https://img.shields.io/npm/v/fruit-fly-trap)](https://www.npmjs.com/package/fruit-fly-trap)
 [![GitHub](https://img.shields.io/github/license/craigahobbs/fruit-fly-trap)](https://github.com/craigahobbs/fruit-fly-trap/blob/main/LICENSE)
 
-[fruit-fly-trap Application](https://craigahobbs.github.io/fruit-fly-trap/)
+**The Fruit Fly Trap Maker** is a JavaScript application that rids your home of annoying fruit flies
+using only a drinking glass, your computer printer, and a small amount of apple cider vinegar (or
+similar). Click the following link to launch the application:
+
+[The Fruit Fly Trap Maker](https://craigahobbs.github.io/fruit-fly-trap/)
+
+## API
+
+The fruit-fly-trap package exposes the utility function to generate cone forms. Click the following
+link to view the API documentation:
 
 [fruit-fly-trap API Documentation](https://craigahobbs.github.io/fruit-fly-trap/doc/)
-
-Coming soon!
 
 
 ## Development
