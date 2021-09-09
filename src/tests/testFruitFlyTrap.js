@@ -36,7 +36,7 @@ test('FruitFlyTrap.run, main', (t) => {
     t.is(app.window, window);
     t.deepEqual(app.params, {});
     t.is(window.document.title, '');
-    t.true(window.document.body.innerHTML.startsWith('<h1>Ye Olde Fruit Fly Trap Maker</h1>'));
+    t.true(window.document.body.innerHTML.startsWith('<h1>Fruit Fly Trap Maker</h1>'));
 });
 
 
@@ -58,6 +58,6 @@ test('FruitFlyTrap.main', (t) => {
     const result = app.main();
     t.deepEqual(
         result.elements[0],
-        [{'html': 'h1', 'elem': [{'text': 'Ye Olde Fruit Fly Trap Maker'}]}]
+        {'html': 'h1', 'elem': [{'text': 'Fruit Fly Trap Maker'}]}
     );
 });
