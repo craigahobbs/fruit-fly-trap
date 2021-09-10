@@ -175,7 +175,8 @@ export class FruitFlyTrap {
 
         // Fruit fly trap form editor
         return {
-            'elements': markdownElements(parseMarkdown(`\
+            'elements': markdownElements(
+                parseMarkdown(`\
 # The Fruit Fly Trap Maker
 
 **The Fruit Fly Trap Maker** rids your home of annoying fruit flies using only a drinking glass,
@@ -186,20 +187,22 @@ containing a small amount of fruit-fly-attracting liquid (e.g., apple cider vine
 below. The fruit flies, attracted to the liquid, fly into the trap through the cone where they
 become trapped!
 
-![Fruit Fly Trap Diagram](fruit-fly-trap.svg)
+~~~ fruit-fly-trap-diagram
+220, 200
+~~~
 
 ## Instructions
 
 1. Measure the drinking glass's top-inside diameter, height, and cone-bottom offset. Use the "Less"
    and "More" links below to enter the measurements.
 
-   **Glass inside-diameter (d)** ([Less](${updownLink('d', false)}) | [More](${updownLink('d', true)})): ${paramsDefault.d}
+   **Glass inside-diameter (d)** ([Less](${updownLink('d', false)}) | [More](${updownLink('d', true)})): ${paramsDefault.d} in
 
-   **Glass height (h)** ([Less](${updownLink('h', false)}) | [More](${updownLink('h', true)})): ${paramsDefault.h}
+   **Glass height (h)** ([Less](${updownLink('h', false)}) | [More](${updownLink('h', true)})): ${paramsDefault.h} in
 
-   **Cone bottom-offset (o)** ([Less](${updownLink('o', false)}) | [More](${updownLink('o', true)})): ${paramsDefault.o}
+   **Cone bottom-offset (o)** ([Less](${updownLink('o', false)}) | [More](${updownLink('o', true)})): ${paramsDefault.o} in
 
-   **Cone bottom diameter (b)** ([Less](${updownLink('b', false)}) | [More](${updownLink('b', true)})): ${paramsDefault.b}
+   **Cone bottom diameter (b)** ([Less](${updownLink('b', false)}) | [More](${updownLink('b', true)})): ${paramsDefault.b} in
 
    At any time, you can [reset the cone measurements](#).
 
@@ -215,7 +218,10 @@ become trapped!
    to form a seal.
 
 6. Set the trap near where you have fruit flies.
-`))
+`),
+                null,
+                {'fruit-fly-trap-diagram': (codeBlock) => fruitFlyTrapDiagram(codeBlock)}
+            )
         };
     }
 
@@ -223,6 +229,168 @@ become trapped!
     static trapFormElements(params) {
         return coneFormElements(params.d, params.b, params.h - params.o, params.o > 0 ? 0.5 : 0);
     }
+}
+
+
+// Fruit fly trap diagram SVG markdown-model code block function
+export function fruitFlyTrapDiagram({lines}) {
+    // Parse the SVG width and height
+    const [width, height] = lines[0].split(',').map((val) => parseInt(val, 10));
+
+    // Constants
+    const precision = 3;
+    const imageMargin = 12;
+    const lineWidth = 1;
+    const glassLineWidth = 5 * lineWidth;
+    const annotationWidth = 20;
+    const annotationBarWidth = 0.5 * annotationWidth;
+    const annotationTextHeight = 1.2 * annotationWidth;
+    const annotationTextSize = 0.7 * annotationWidth;
+    const airHeight = annotationWidth;
+    const liquidHeight = 1.5 * airHeight;
+
+    // Glass position
+    const glassTop = 0.25 * height;
+    const glassLeft = imageMargin + annotationWidth + 0.5 * glassLineWidth;
+    const glassLeftRight = glassLeft + 0.5 * glassLineWidth;
+    const glassBottom = height - imageMargin - 0.5 * glassLineWidth;
+    const glassRight = width - glassLeft;
+    const glassRightLeft = glassRight - 0.5 * glassLineWidth;
+
+    // Cone position
+    const coneBottom = height - imageMargin - glassLineWidth - liquidHeight - airHeight;
+    const coneBottomLeft = 0.5 * width - annotationWidth;
+    const coneBottomRight = width - coneBottomLeft;
+    const coneTop = imageMargin;
+    const coneTopLeft = (coneBottomLeft * (glassTop - coneTop) + glassLeftRight * (coneTop - coneBottom)) / (glassTop - coneBottom);
+    const coneTopRight = width - coneTopLeft;
+
+    // Helper function to create vertical annotations
+    const verticalAnnotation = (text, xcoord, top, bottom) => [
+        {
+            'svg': 'path',
+            'attr': {
+                'fill': 'white',
+                'stroke': 'black',
+                'stroke-width': lineWidth.toFixed(precision),
+                'd': `\
+M ${(xcoord - 0.5 * annotationBarWidth).toFixed(precision)} ${top.toFixed(precision)} \
+L ${(xcoord + 0.5 * annotationBarWidth).toFixed(precision)} ${top.toFixed(precision)} \
+M ${xcoord.toFixed(precision)} ${top.toFixed(precision)} \
+L ${xcoord.toFixed(precision)} ${(0.5 * (top + bottom) - 0.5 * annotationTextHeight).toFixed(precision)} \
+M ${xcoord.toFixed(precision)} ${bottom.toFixed(precision)} \
+L ${xcoord.toFixed(precision)} ${(0.5 * (top + bottom) + 0.5 * annotationTextHeight).toFixed(precision)} \
+M ${(xcoord - 0.5 * annotationBarWidth).toFixed(precision)} ${bottom.toFixed(precision)} \
+L ${(xcoord + 0.5 * annotationBarWidth).toFixed(precision)} ${bottom.toFixed(precision)}`
+            }
+        },
+        {
+            'svg': 'text',
+            'attr': {
+                'x': xcoord.toFixed(precision),
+                'y': (0.5 * (top + bottom)).toFixed(precision)
+            },
+            'elem': {'text': text}
+        }
+    ];
+
+    // Helper function to create horizontal annotations
+    const horizontalAnnotation = (text, ycoord, left, right) => [
+        {
+            'svg': 'path',
+            'attr': {
+                'fill': 'white',
+                'stroke': 'black',
+                'stroke-width': lineWidth.toFixed(precision),
+                'd': `\
+M ${left.toFixed(precision)} ${(ycoord - 0.5 * annotationBarWidth).toFixed(precision)} \
+L ${left.toFixed(precision)} ${(ycoord + 0.5 * annotationBarWidth).toFixed(precision)} \
+M ${left.toFixed(precision)} ${ycoord.toFixed(precision)} \
+L ${(0.5 * (left + right) - 0.5 * annotationTextHeight).toFixed(precision)} ${ycoord.toFixed(precision)} \
+M ${right.toFixed(precision)} ${ycoord.toFixed(precision)} \
+L ${(0.5 * (left + right) + 0.5 * annotationTextHeight).toFixed(precision)} ${ycoord.toFixed(precision)} \
+M ${right.toFixed(precision)} ${(ycoord - 0.5 * annotationBarWidth).toFixed(precision)} \
+L ${right.toFixed(precision)} ${(ycoord + 0.5 * annotationBarWidth).toFixed(precision)}`
+            }
+        },
+        {
+            'svg': 'text',
+            'attr': {
+                'x': (0.5 * (left + right)).toFixed(precision),
+                'y': ycoord.toFixed(precision)
+            },
+            'elem': {'text': text}
+        }
+    ];
+
+    // Return the fruit fly trap diagram element model
+    return {
+        'html': 'p',
+        'elem': {
+            'svg': 'svg',
+            'attr': {
+                'width': width.toFixed(precision),
+                'height': height.toFixed(precision),
+                'font-size': `${annotationTextSize.toFixed(precision)}px`,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'middle'
+            },
+            'elem': [
+                // Liquid
+                {
+                    'svg': 'path',
+                    'attr': {
+                        'fill': '#cc99ff80',
+                        'stroke': 'none',
+                        'stroke-width': glassLineWidth.toFixed(precision),
+                        'd': `\
+M ${glassLeft.toFixed(precision)} ${(glassBottom - liquidHeight).toFixed(precision)} \
+L ${glassLeft.toFixed(precision)} ${glassBottom.toFixed(precision)} \
+L ${glassRight.toFixed(precision)} ${glassBottom.toFixed(precision)} \
+L ${glassRight.toFixed(precision)} ${(glassBottom - liquidHeight).toFixed(precision)}
+Z`
+                    }
+                },
+
+                // Glass
+                {
+                    'svg': 'path',
+                    'attr': {
+                        'fill': 'none',
+                        'stroke': 'black',
+                        'stroke-width': glassLineWidth.toFixed(precision),
+                        'd': `\
+M ${glassLeft.toFixed(precision)} ${glassTop.toFixed(precision)} \
+L ${glassLeft.toFixed(precision)} ${glassBottom.toFixed(precision)} \
+L ${glassRight.toFixed(precision)} ${glassBottom.toFixed(precision)} \
+L ${glassRight.toFixed(precision)} ${glassTop.toFixed(precision)}`
+                    }
+                },
+
+                // Cone
+                {
+                    'svg': 'path',
+                    'attr': {
+                        'fill': 'white',
+                        'stroke': 'black',
+                        'stroke-width': lineWidth.toFixed(precision),
+                        'd': `\
+M ${coneTopLeft.toFixed(precision)} ${coneTop.toFixed(precision)} \
+L ${coneBottomLeft.toFixed(precision)} ${coneBottom.toFixed(precision)} \
+L ${coneBottomRight.toFixed(precision)} ${coneBottom.toFixed(precision)} \
+L ${coneTopRight.toFixed(precision)} ${coneTop.toFixed(precision)}
+Z`
+                    }
+                },
+
+                // Annotations
+                verticalAnnotation('h', imageMargin + 0.5 * annotationBarWidth, glassTop, glassBottom),
+                verticalAnnotation('o', width - imageMargin - 0.5 * annotationBarWidth, coneBottom, glassBottom),
+                horizontalAnnotation('d', glassTop - annotationWidth + 0.5 * annotationBarWidth, glassLeftRight, glassRightLeft),
+                horizontalAnnotation('b', coneBottom - annotationWidth + 0.5 * annotationBarWidth, coneBottomLeft, coneBottomRight)
+            ]
+        }
+    };
 }
 
 
