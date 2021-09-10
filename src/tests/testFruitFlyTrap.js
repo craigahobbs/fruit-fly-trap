@@ -5,6 +5,7 @@
 
 import {FruitFlyTrap, coneFormElements} from '../fruit-fly-trap/index.js';
 import Window from 'window';
+import {fruitFlyTrapDiagram} from '../fruit-fly-trap/fruitFlyTrap.js';
 import test from 'ava';
 
 
@@ -76,9 +77,7 @@ function getMainElements({
                     'become trapped!'
             }
         ]},
-        {'html': 'p', 'elem': [
-            {'html': 'img', 'attr': {'src': 'fruit-fly-trap.svg', 'alt': 'Fruit Fly Trap Diagram'}}
-        ]},
+        fruitFlyTrapDiagram({'lines': ['220, 200']}),
         {'html': 'h2', 'elem': [{'text': 'Instructions'}]},
         {'html': 'ol', 'attr': null, 'elem': [
             {'html': 'li', 'elem': [
@@ -94,7 +93,7 @@ function getMainElements({
                     {'html': 'a', 'attr': {'href': dLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
                     {'html': 'a', 'attr': {'href': dMore}, 'elem': [{'text': 'More'}]},
-                    {'text': `): ${dValue}`}
+                    {'text': `): ${dValue} in`}
                 ]},
                 {'html': 'p', 'elem': [
                     {'html': 'strong', 'elem': [{'text': 'Glass height (h)'}]},
@@ -102,7 +101,7 @@ function getMainElements({
                     {'html': 'a', 'attr': {'href': hLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
                     {'html': 'a', 'attr': {'href': hMore}, 'elem': [{'text': 'More'}]},
-                    {'text': `): ${hValue}`}
+                    {'text': `): ${hValue} in`}
                 ]},
                 {'html': 'p', 'elem': [
                     {'html': 'strong', 'elem': [{'text': 'Cone bottom-offset (o)'}]},
@@ -110,7 +109,7 @@ function getMainElements({
                     {'html': 'a', 'attr': {'href': oLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
                     {'html': 'a', 'attr': {'href': oMore}, 'elem': [{'text': 'More'}]},
-                    {'text': `): ${oValue}`}
+                    {'text': `): ${oValue} in`}
                 ]},
                 {'html': 'p', 'elem': [
                     {'html': 'strong', 'elem': [{'text': 'Cone bottom diameter (b)'}]},
@@ -118,7 +117,7 @@ function getMainElements({
                     {'html': 'a', 'attr': {'href': bLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
                     {'html': 'a', 'attr': {'href': bMore}, 'elem': [{'text': 'More'}]},
-                    {'text': `): ${bValue}`}
+                    {'text': `): ${bValue} in`}
                 ]},
                 {'html': 'p', 'elem': [
                     {'text': 'At any time, you can '},
@@ -455,6 +454,123 @@ test('FruitFlyTrap.main, print zero-offset', (t) => {
                         }
                     ]
                 }
+            }
+        }
+    );
+});
+
+
+test('fruitFlyTrapDiagram', (t) => {
+    t.deepEqual(
+        fruitFlyTrapDiagram({'lines': ['220, 200']}),
+        {
+            'html': 'p',
+            'elem': {
+                'svg': 'svg',
+                'attr': {
+                    'width': '220.000',
+                    'height': '200.000',
+                    'font-size': '14.000px',
+                    'text-anchor': 'middle',
+                    'dominant-baseline': 'middle'
+                },
+                'elem': [
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'fill': '#cc99ff80',
+                            'stroke': 'none',
+                            'stroke-width': '5.000',
+                            'd': 'M 34.500 155.500 L 34.500 185.500 L 185.500 185.500 L 185.500 155.500\nZ'
+                        }
+                    },
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'fill': 'none',
+                            'stroke': 'black',
+                            'stroke-width': '5.000',
+                            'd': 'M 34.500 50.000 L 34.500 185.500 L 185.500 185.500 L 185.500 50.000'
+                        }
+                    },
+                    {
+                        'svg': 'path',
+                        'attr': {
+                            'fill': 'white',
+                            'stroke': 'black',
+                            'stroke-width': '1.000',
+                            'd': 'M 12.735 12.000 L 90.000 133.000 L 130.000 133.000 L 207.265 12.000\nZ'
+                        }
+                    },
+                    [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'fill': 'white',
+                                'stroke': 'black',
+                                'stroke-width': '1.000',
+                                'd': 'M 12.000 50.000 L 22.000 50.000 M 17.000 50.000 L 17.000 105.750 ' +
+                                    'M 17.000 185.500 L 17.000 129.750 M 12.000 185.500 L 22.000 185.500'
+                            }
+                        },
+                        {
+                            'svg': 'text',
+                            'attr': {'x': '17.000', 'y': '117.750'},
+                            'elem': {'text': 'h'}
+                        }
+                    ],
+                    [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'fill': 'white',
+                                'stroke': 'black',
+                                'stroke-width': '1.000',
+                                'd': 'M 198.000 133.000 L 208.000 133.000 M 203.000 133.000 L 203.000 147.250 ' +
+                                    'M 203.000 185.500 L 203.000 171.250 M 198.000 185.500 L 208.000 185.500'
+                            }
+                        },
+                        {
+                            'svg': 'text',
+                            'attr': {'x': '203.000', 'y': '159.250'},
+                            'elem': {'text': 'o'}
+                        }
+                    ],
+                    [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'fill': 'white',
+                                'stroke': 'black',
+                                'stroke-width': '1.000',
+                                'd': 'M 37.000 30.000 L 37.000 40.000 M 37.000 35.000 L 98.000 35.000 ' +
+                                    'M 183.000 35.000 L 122.000 35.000 M 183.000 30.000 L 183.000 40.000'
+                            }
+                        },
+                        {
+                            'svg': 'text',
+                            'attr': {'x': '110.000', 'y': '35.000'},
+                            'elem': {'text': 'd'}
+                        }
+                    ],
+                    [
+                        {
+                            'svg': 'path',
+                            'attr': {
+                                'fill': 'white',
+                                'stroke': 'black',
+                                'stroke-width': '1.000',
+                                'd': 'M 90.000 113.000 L 90.000 123.000 M 90.000 118.000 L 98.000 118.000 ' +
+                                    'M 130.000 118.000 L 122.000 118.000 M 130.000 113.000 L 130.000 123.000'
+                            }
+                        },
+                        {
+                            'svg': 'text',
+                            'attr': {'x': '110.000', 'y': '118.000'},
+                            'elem': {'text': 'b'}
+                        }
+                    ]
+                ]
             }
         }
     );

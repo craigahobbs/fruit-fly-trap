@@ -38,7 +38,7 @@ run: app
 
 .PHONY: app
 commit: app
-app: build/npm.build
+app: build/npm.build doc
 	rm -rf build/app/
 	mkdir -p build/app/
 
