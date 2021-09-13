@@ -469,10 +469,7 @@ test('fruitFlyTrapDiagram', (t) => {
                 'svg': 'svg',
                 'attr': {
                     'width': '220.000',
-                    'height': '200.000',
-                    'font-size': '14.000px',
-                    'text-anchor': 'middle',
-                    'dominant-baseline': 'middle'
+                    'height': '200.000'
                 },
                 'elem': [
                     {
@@ -515,7 +512,13 @@ test('fruitFlyTrapDiagram', (t) => {
                         },
                         {
                             'svg': 'text',
-                            'attr': {'x': '17.000', 'y': '117.750'},
+                            'attr': {
+                                'x': '17.000',
+                                'y': '117.750',
+                                'font-size': '14.000px',
+                                'text-anchor': 'middle',
+                                'dominant-baseline': 'middle'
+                            },
                             'elem': {'text': 'h'}
                         }
                     ],
@@ -532,7 +535,13 @@ test('fruitFlyTrapDiagram', (t) => {
                         },
                         {
                             'svg': 'text',
-                            'attr': {'x': '203.000', 'y': '159.250'},
+                            'attr': {
+                                'x': '203.000',
+                                'y': '159.250',
+                                'font-size': '14.000px',
+                                'text-anchor': 'middle',
+                                'dominant-baseline': 'middle'
+                            },
                             'elem': {'text': 'o'}
                         }
                     ],
@@ -549,7 +558,13 @@ test('fruitFlyTrapDiagram', (t) => {
                         },
                         {
                             'svg': 'text',
-                            'attr': {'x': '110.000', 'y': '35.000'},
+                            'attr': {
+                                'x': '110.000',
+                                'y': '35.000',
+                                'font-size': '14.000px',
+                                'text-anchor': 'middle',
+                                'dominant-baseline': 'middle'
+                            },
                             'elem': {'text': 'd'}
                         }
                     ],
@@ -566,7 +581,13 @@ test('fruitFlyTrapDiagram', (t) => {
                         },
                         {
                             'svg': 'text',
-                            'attr': {'x': '110.000', 'y': '118.000'},
+                            'attr': {
+                                'x': '110.000',
+                                'y': '118.000',
+                                'font-size': '14.000px',
+                                'text-anchor': 'middle',
+                                'dominant-baseline': 'middle'
+                            },
                             'elem': {'text': 'b'}
                         }
                     ]

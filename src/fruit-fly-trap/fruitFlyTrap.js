@@ -308,7 +308,7 @@ L ${right.toFixed(precision)} ${(ycoord + 0.5 * annotationBarWidth).toFixed(prec
             'svg': 'svg',
             'attr': {
                 'width': width.toFixed(precision),
-                'height': height.toFixed(precision),
+                'height': height.toFixed(precision)
             },
             'elem': [
                 // Liquid
