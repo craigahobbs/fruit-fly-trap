@@ -260,7 +260,10 @@ L ${(xcoord + 0.5 * annotationBarWidth).toFixed(precision)} ${bottom.toFixed(pre
             'svg': 'text',
             'attr': {
                 'x': xcoord.toFixed(precision),
-                'y': (0.5 * (top + bottom)).toFixed(precision)
+                'y': (0.5 * (top + bottom)).toFixed(precision),
+                'font-size': `${annotationTextSize.toFixed(precision)}px`,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'middle'
             },
             'elem': {'text': text}
         }
@@ -289,7 +292,10 @@ L ${right.toFixed(precision)} ${(ycoord + 0.5 * annotationBarWidth).toFixed(prec
             'svg': 'text',
             'attr': {
                 'x': (0.5 * (left + right)).toFixed(precision),
-                'y': ycoord.toFixed(precision)
+                'y': ycoord.toFixed(precision),
+                'font-size': `${annotationTextSize.toFixed(precision)}px`,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'middle'
             },
             'elem': {'text': text}
         }
@@ -302,10 +308,7 @@ L ${right.toFixed(precision)} ${(ycoord + 0.5 * annotationBarWidth).toFixed(prec
             'svg': 'svg',
             'attr': {
                 'width': width.toFixed(precision),
-                'height': height.toFixed(precision),
-                'font-size': `${annotationTextSize.toFixed(precision)}px`,
-                'text-anchor': 'middle',
-                'dominant-baseline': 'middle'
+                'height': height.toFixed(precision)
             },
             'elem': [
                 // Liquid
