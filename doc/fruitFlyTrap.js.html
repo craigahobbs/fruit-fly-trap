@@ -39,9 +39,18 @@ import {renderElements} from 'element-model/index.js';
 // Default parameter values
 const defaultParamValues = {
     'd': 3,
-    'b': 0.7,
+    'b': 0.75,
     'h': 4.5,
     'o': 1
+};
+
+
+// Default metric parameter values
+const defaultMetricParamValues = {
+    'd': 7.5,
+    'b': 2,
+    'h': 11.5,
+    'o': 2.5
 };
 
 
@@ -53,26 +62,33 @@ struct FruitFlyTrap
     # Optional command
     optional Command cmd
 
-    # The diameter of the glass, in inches (default is ${defaultParamValues.d} in)
+    # The diameter of the glass, in inches or centimeters, as determined by the "metric" member
+    # (default is ${defaultParamValues.d} in. or ${defaultMetricParamValues.d} cm.)
     optional float(>= 1, &lt;= 36) d
 
-    # The diameter of the cone's bottom hole, in inches (default is ${defaultParamValues.b} in)
+    # The diameter of the cone's bottom hole, in inches or centimeters, as determined by the "metric" member
+    # (default is ${defaultParamValues.b} in. or ${defaultMetricParamValues.b} cm.)
     optional float(>= 0.1, &lt;= 32) b
 
-    # The height of the glass, in inches (default is ${defaultParamValues.h} in)
+    # The height of the glass, in inches or centimeters, as determined by the "metric" member
+    # (default is ${defaultParamValues.h} in. or ${defaultParamValues.h} cm.)
     optional float(>= 1, &lt;= 24) h
 
-    # The offset from the bottom of the glass, in inches (default is ${defaultParamValues.o} in)
+    # The offset from the bottom of the glass, in inches or centimeters, as determined by the "metric" member
+    # (default is ${defaultParamValues.o} in. or ${defaultParamValues.o} cm.)
     optional float(>= 0, &lt;= 6) o
+
+    # If set, use metric units (centimeters). Otherwise, use imperial units (inches, the default).
+    optional int(== 1) metric
 
 # Application command union
 union Command
 
     # Render the application's hash parameter documentation
-    int(==1) help
+    int(== 1) help
 
     # Print the cone form pattern
-    int(==1) print
+    int(== 1) print
 `).types);
 
 
@@ -149,10 +165,22 @@ export class FruitFlyTrap {
             return {'elements': (new UserTypeElements(this.params)).getElements(appHashTypes, 'FruitFlyTrap')};
         }
 
+        // Imperial units or metric?
+        const metric = 'metric' in this.params;
+        const units = metric ? 'cm' : 'in';
+        const paramsDefault = metric ? {...defaultMetricParamValues, ...this.params} : {...defaultParamValues, ...this.params};
+
+        // Helper function to get a fruit fly trap cone form elements
+        const trapFormElements = (params) => {
+            const flapLength = metric ? 0.5 : 0.2;
+            const lineWidth = metric ? 0.018 : 0.007;
+            const extraLength = params.o > 0 ? (metric ? 1.25 : 0.5) : 0;
+            return coneFormElements(params.d, params.b, params.h - params.o, flapLength, lineWidth, units, extraLength);
+        };
+
         // Print?
-        const paramsDefault = {...defaultParamValues, ...this.params};
         if ('cmd' in this.params &amp;&amp; 'print' in this.params.cmd) {
-            return {'elements': FruitFlyTrap.trapFormElements(paramsDefault)};
+            return {'elements': trapFormElements(paramsDefault)};
         }
 
         // Helper function for up/down links
@@ -160,14 +188,14 @@ export class FruitFlyTrap {
             const linkParams = {...this.params};
             const testParams = {...paramsDefault};
             const {attr} = appHashTypes.FruitFlyTrap.struct.members.find((member) => member.name === param);
-            const delta = 0.1;
-            const roundFactor = 10;
+            const delta = metric ? 0.1 : 0.125;
+            const roundFactor = 1 / delta;
             if (up) {
                 testParams[param] = Math.round(roundFactor * Math.min(testParams[param] + delta, attr.lte)) / roundFactor;
             } else {
                 testParams[param] = Math.round(roundFactor * Math.max(testParams[param] - delta, attr.gte)) / roundFactor;
             }
-            if (FruitFlyTrap.trapFormElements(testParams) !== null) {
+            if (trapFormElements(testParams) !== null) {
                 linkParams[param] = testParams[param];
             }
             return `#${encodeQueryString(linkParams)}`;
@@ -184,8 +212,8 @@ your computer printer, and a small amount of apple cider vinegar (or similar).
 
 The trap is made by placing a custom-fitted cone (based on your measurements) into a drinking glass
 containing a small amount of fruit-fly-attracting liquid (e.g., apple cider vinegar), as pictured
-below. The fruit flies, attracted to the liquid, fly into the trap through the cone where they
-become trapped!
+below. The fruit flies fly in through the cone opening and become trapped between the cone and the
+liquid.
 
 ~~~ fruit-fly-trap-diagram
 220, 200
@@ -193,26 +221,31 @@ become trapped!
 
 ## Instructions
 
-1. Measure the drinking glass's top-inside diameter, height, and cone-bottom offset. Use the "Less"
-   and "More" links below to enter the measurements.
+1. Measure the drinking glass's top-inside diameter, height, and cone-bottom offset (see diagram
+   above). The cone-bottom offset is the distance from the bottom of the glass to the bottom of the
+   trap cone, allowing enough room for the liquid and space for the fruit flies to get into the
+   trap. Use the "Less" and "More" links below to enter the measurements.
 
-   **Glass inside-diameter (d)** ([Less](${updownLink('d', false)}) | [More](${updownLink('d', true)})): ${paramsDefault.d} in
+   **Glass inside-diameter (d)** ([Less](${updownLink('d', false)}) | [More](${updownLink('d', true)})): ${paramsDefault.d} ${units}
 
-   **Glass height (h)** ([Less](${updownLink('h', false)}) | [More](${updownLink('h', true)})): ${paramsDefault.h} in
+   **Glass height (h)** ([Less](${updownLink('h', false)}) | [More](${updownLink('h', true)})): ${paramsDefault.h} ${units}
 
-   **Cone bottom-offset (o)** ([Less](${updownLink('o', false)}) | [More](${updownLink('o', true)})): ${paramsDefault.o} in
+   **Cone bottom-offset (o)** ([Less](${updownLink('o', false)}) | [More](${updownLink('o', true)})): ${paramsDefault.o} ${units}
 
-   **Cone bottom diameter (b)** ([Less](${updownLink('b', false)}) | [More](${updownLink('b', true)})): ${paramsDefault.b} in
+   **Cone bottom diameter (b)** ([Less](${updownLink('b', false)}) | [More](${updownLink('b', true)})): ${paramsDefault.b} ${units}
 
-   At any time, you can [reset the cone measurements](#).
+   Click here to [use ${metric ? 'imperial' : 'metric'} units](${metric ? '#' : '#metric=1'}).
+   At any time, you can [reset the cone measurements](${metric ? '#metric=1' : '#'}).
 
-2. [Print the cone form](#${encodeQueryString({...this.params, 'cmd': {'print': 1}})}). Using
-   scissors, cut along the dotted line to cut out the cone form.
+2. Print the cone form using the link below. Cut out the cone form carefully using scissors. Use
+   your browser's back button to return to this page after printing.
+
+   [Print Cone Form](#${encodeQueryString({...this.params, 'cmd': {'print': 1}})})
 
 3. Tape the cone together along the cone form's flap line.
 
-4. Pour a small amount of fruit-fly-attracting liquid (e.g., apple cider vinegar) into the glass.
-   Be sure the liquid level is at least 1/4" below the cone-bottom offset you measured above.
+4. Pour a small amount of fruit-fly-attracting liquid (e.g., apple cider vinegar) into the glass. Be
+   sure the liquid level is at least ${metric ? '1/2 cm.' : '1/4 in.'} below the cone-bottom.
 
 5. Place the cone form in the glass. It may help to rub some water around the top rim of the glass
    to form a seal.
@@ -223,11 +256,6 @@ become trapped!
                 {'fruit-fly-trap-diagram': (codeBlock) => fruitFlyTrapDiagram(codeBlock)}
             )
         };
-    }
-
-    // Helper function to get a fruit fly trap cone form elements
-    static trapFormElements(params) {
-        return coneFormElements(params.d, params.b, params.h - params.o, params.o > 0 ? 0.5 : 0);
     }
 }
 
@@ -403,21 +431,23 @@ Z`
  * @property {number} diameterTop - The cone's top diameter
  * @property {number} diameterBottom - The cone's bottom diameter
  * @property {number} height - The cone's height
+ * @property {number} flapLength - The cone form's flap length
+ * @property {number} lineWidth - The cone form's line width
+ * @property {string} [units='in'] - The units of each measure (e.g., diameterTop)
  * @property {number} [extraLength=0] - Extra length to add to the cone's side
  * @returns {Object} The cone form's element model
  */
-export function coneFormElements(diameterTop, diameterBottom, height, extraLength = 0) {
+export function coneFormElements(diameterTop, diameterBottom, height, flapLength, lineWidth, units = 'in', extraLength = 0) {
     // Compute the cone form's radii and theta
     const formRadius = height * diameterBottom / (diameterTop - diameterBottom);
     const formRadiusOuter = formRadius + height + extraLength;
     const formTheta = Math.PI * diameterBottom / formRadius;
 
     // Compute the flap angle
-    const flapLength = 0.125;
     const flapTheta = formTheta + flapLength / formRadius;
 
     // Invalid cone specification?
-    if (diameterBottom > 0.9 * diameterTop || flapTheta > 2 * Math.PI) {
+    if (diameterBottom > 0.9 * diameterTop || flapTheta > 0.9 * 2 * Math.PI) {
         return null;
     }
 
@@ -453,11 +483,10 @@ export function coneFormElements(diameterTop, diameterBottom, height, extraLengt
     }
 
     // Expand the form bounding box by one line width (to accomodate lines)
-    const lineWidthIn = 0.5 / 72;
-    formMinX -= lineWidthIn;
-    formMinY -= lineWidthIn;
-    formMaxX += lineWidthIn;
-    formMaxY += lineWidthIn;
+    formMinX -= lineWidth;
+    formMinY -= lineWidth;
+    formMaxX += lineWidth;
+    formMaxY += lineWidth;
 
     // Compute the cone form guide line
     const guideInnerX = formRadius * Math.sin(formTheta);
@@ -470,8 +499,8 @@ export function coneFormElements(diameterTop, diameterBottom, height, extraLengt
     return {
         'svg': 'svg',
         'attr': {
-            'width': `${(formMaxX - formMinX).toFixed(precision)}in`,
-            'height': `${(formMaxY - formMinY).toFixed(precision)}in`,
+            'width': `${(formMaxX - formMinX).toFixed(precision)}${units}`,
+            'height': `${(formMaxY - formMinY).toFixed(precision)}${units}`,
             'viewBox': (`${formMinX.toFixed(precision)} ${formMinY.toFixed(precision)} ` +
                         `${(formMaxX - formMinX).toFixed(precision)} ${(formMaxY - formMinY).toFixed(precision)}`)
         },
@@ -481,13 +510,13 @@ export function coneFormElements(diameterTop, diameterBottom, height, extraLengt
                 'transform': `scale(1, -1) translate(0, ${-(formMinY + formMaxY).toFixed(precision)})`,
                 'fill': 'none',
                 'stroke': 'black',
-                'stroke-width': `${lineWidthIn.toFixed(precision)}`
+                'stroke-width': `${lineWidth.toFixed(precision)}`
             },
             'elem': [
                 {
                     'svg': 'path',
                     'attr': {
-                        'stroke-dasharray': `${5 * lineWidthIn.toFixed(precision)}`,
+                        'stroke-dasharray': `${(5 * lineWidth).toFixed(precision)}`,
                         'd': (`M 0 ${formRadius.toFixed(precision)} ` +
                               `A ${formRadius.toFixed(precision)} ${formRadius.toFixed(precision)}` +
                               ` 0 ${flapTheta > Math.PI ? 1 : 0} 0 ${flapInnerX.toFixed(precision)} ${flapInnerY.toFixed(precision)} ` +
