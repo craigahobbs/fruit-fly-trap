@@ -1,3 +1,9 @@
+## 1.1.0 (2021-09-16)
+
+- [a419f48](https://github.com/craigahobbs/fruit-fly-trap/commit/a419f48) - add metric support
+
+- [60eecdf](https://github.com/craigahobbs/fruit-fly-trap/commit/60eecdf) - fix text alignment on safari
+
 ## 1.0.1 (2021-09-10)
 
 - [df8f9a0](https://github.com/craigahobbs/fruit-fly-trap/commit/df8f9a0) - update fruit fly trap diagram
