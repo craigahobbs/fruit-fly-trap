@@ -225,8 +225,11 @@ liquid.
 
 6. Set the trap near where you have fruit flies.
 `),
-                null,
-                {'fruit-fly-trap-diagram': (codeBlock) => fruitFlyTrapDiagram(codeBlock)}
+                {
+                    'codeBlocks': {
+                        'fruit-fly-trap-diagram': fruitFlyTrapDiagram
+                    }
+                }
             )
         };
     }
@@ -234,7 +237,7 @@ liquid.
 
 
 // Fruit fly trap diagram SVG markdown-model code block function
-export function fruitFlyTrapDiagram({lines}) {
+export function fruitFlyTrapDiagram(language, lines) {
     // Parse the SVG width and height
     const [width, height] = lines[0].split(',').map((val) => parseInt(val, 10));
 
