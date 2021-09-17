@@ -1,3 +1,7 @@
+## 1.1.1 (2021-09-17)
+
+- [1628349](https://github.com/craigahobbs/fruit-fly-trap/commit/1628349) - update instruction markdown
+
 ## 1.1.0 (2021-09-16)
 
 - [a419f48](https://github.com/craigahobbs/fruit-fly-trap/commit/a419f48) - add metric support
