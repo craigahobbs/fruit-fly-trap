@@ -1,3 +1,7 @@
+## 1.1.3 (2021-09-17)
+
+- [b9b7b4c](https://github.com/craigahobbs/fruit-fly-trap/commit/b9b7b4c) - update markdown-model
+
 ## 1.1.2 (2021-09-17)
 
 - [caae622](https://github.com/craigahobbs/fruit-fly-trap/commit/caae622) - markdown-model 1.1
