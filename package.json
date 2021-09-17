@@ -1,7 +1,7 @@
 {
     "type": "module",
     "name": "fruit-fly-trap",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "The Fruit Fly Trap Maker",
     "keywords": [
         "fruit",
