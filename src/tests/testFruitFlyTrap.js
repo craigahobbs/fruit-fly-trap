@@ -122,7 +122,10 @@ function getMainElements({
                         'attr': {'href': metric ? '#' : '#metric=1'},
                         'elem': [{'text': `use ${metric ? 'imperial' : 'metric'} units`}]
                     },
-                    {'text': '.\n   At any time, you can '},
+                    {'text': '.'}
+                ]},
+                {'html': 'p', 'elem': [
+                    {'text': 'At any time, you can '},
                     {'html': 'a', 'attr': {'href': metric ? '#metric=1' : '#'}, 'elem': [{'text': 'reset the cone measurements'}]},
                     {'text': '.'}
                 ]}
