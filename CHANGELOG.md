@@ -1,3 +1,7 @@
+## 1.1.5 (2021-09-17)
+
+- [c452da9](https://github.com/craigahobbs/fruit-fly-trap/commit/c452da9) - update input labels
+
 ## 1.1.4 (2021-09-17)
 
 - [2ad9ccc](https://github.com/craigahobbs/fruit-fly-trap/commit/2ad9ccc) - remove markdownElements headerIds option
