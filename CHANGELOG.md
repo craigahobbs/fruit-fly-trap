@@ -1,3 +1,7 @@
+## 1.1.4 (2021-09-17)
+
+- [2ad9ccc](https://github.com/craigahobbs/fruit-fly-trap/commit/2ad9ccc) - remove markdownElements headerIds option
+
 ## 1.1.3 (2021-09-17)
 
 - [b9b7b4c](https://github.com/craigahobbs/fruit-fly-trap/commit/b9b7b4c) - update markdown-model
