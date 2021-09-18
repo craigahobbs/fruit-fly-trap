@@ -84,7 +84,7 @@ function getMainElements({
                      '   trap. Use the "Less" and "More" links below to enter the measurements.'}
                 ]},
                 {'html': 'p', 'elem': [
-                    {'html': 'strong', 'elem': [{'text': 'Glass inside-diameter (d)'}]},
+                    {'html': 'strong', 'elem': [{'text': 'Inside diameter (d)'}]},
                     {'text': ' ('},
                     {'html': 'a', 'attr': {'href': dLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
@@ -92,7 +92,7 @@ function getMainElements({
                     {'text': `): ${dValue}`}
                 ]},
                 {'html': 'p', 'elem': [
-                    {'html': 'strong', 'elem': [{'text': 'Glass height (h)'}]},
+                    {'html': 'strong', 'elem': [{'text': 'Height (h)'}]},
                     {'text': ' ('},
                     {'html': 'a', 'attr': {'href': hLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
@@ -100,7 +100,7 @@ function getMainElements({
                     {'text': `): ${hValue}`}
                 ]},
                 {'html': 'p', 'elem': [
-                    {'html': 'strong', 'elem': [{'text': 'Cone bottom-offset (o)'}]},
+                    {'html': 'strong', 'elem': [{'text': 'Bottom offset (o)'}]},
                     {'text': ' ('},
                     {'html': 'a', 'attr': {'href': oLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
@@ -108,7 +108,7 @@ function getMainElements({
                     {'text': `): ${oValue}`}
                 ]},
                 {'html': 'p', 'elem': [
-                    {'html': 'strong', 'elem': [{'text': 'Cone bottom diameter (b)'}]},
+                    {'html': 'strong', 'elem': [{'text': 'Bottom diameter (b)'}]},
                     {'text': ' ('},
                     {'html': 'a', 'attr': {'href': bLess}, 'elem': [{'text': 'Less'}]},
                     {'text': ' | '},
