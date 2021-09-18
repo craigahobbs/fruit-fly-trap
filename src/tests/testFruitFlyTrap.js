@@ -37,7 +37,7 @@ test('FruitFlyTrap.run, main', (t) => {
     t.is(app.window, window);
     t.deepEqual(app.params, {});
     t.is(window.document.title, '');
-    t.true(window.document.body.innerHTML.startsWith('<h1 id="the-fruit-fly-trap-maker">The Fruit Fly Trap Maker</h1>'));
+    t.true(window.document.body.innerHTML.startsWith('<h1>The Fruit Fly Trap Maker</h1>'));
 });
 
 
@@ -61,7 +61,7 @@ function getMainElements({
     print = '#cmd.print=1', metric = false
 } = {}) {
     return {'elements': [
-        {'html': 'h1', 'attr': {'id': 'the-fruit-fly-trap-maker'}, 'elem': [{'text': 'The Fruit Fly Trap Maker'}]},
+        {'html': 'h1', 'attr': null, 'elem': [{'text': 'The Fruit Fly Trap Maker'}]},
         {'html': 'p', 'elem': [
             {'html': 'strong', 'elem': [{'text': 'The Fruit Fly Trap Maker'}]},
             {'text': ' rids your home of annoying fruit flies using only a drinking glass,\n' +
@@ -74,7 +74,7 @@ function getMainElements({
              'liquid.'}
         ]},
         fruitFlyTrapDiagram('fruit-fly-trap-diagram', ['220, 200']),
-        {'html': 'h2', 'attr': {'id': 'instructions'}, 'elem': [{'text': 'Instructions'}]},
+        {'html': 'h2', 'attr': null, 'elem': [{'text': 'Instructions'}]},
         {'html': 'ol', 'attr': null, 'elem': [
             {'html': 'li', 'elem': [
                 {'html': 'p', 'elem': [
