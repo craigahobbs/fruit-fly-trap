@@ -228,8 +228,7 @@ liquid.
                 {
                     'codeBlocks': {
                         'fruit-fly-trap-diagram': fruitFlyTrapDiagram
-                    },
-                    'headerIds': true
+                    }
                 }
             )
         };
